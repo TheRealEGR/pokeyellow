@@ -1,6 +1,6 @@
 	db DEX_FARFETCHD ; pokedex id
 
-	db  52,  65,  55,  60,  58
+	db  52,  90,  55,  60,  62
 	;   hp  atk  def  spd  spc
 
 	db NORMAL, FLYING ; type
@@ -20,4 +20,5 @@
 	     SUBSTITUTE,   CUT,          FLY
 	; end
 
-	db 0 ; padding
+	db BANK(FarfetchdPicFront)
+	assert BANK(FarfetchdPicFront) == BANK(FarfetchdPicBack)

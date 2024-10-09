@@ -10,6 +10,8 @@ PokemonMansion2FWildMons:
 	db 35, GRIMER
 	db 35, MUK
 	db 38, MUK
+	db 34, KOFFING
+	db 39, WEEZING
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

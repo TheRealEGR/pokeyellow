@@ -237,6 +237,7 @@ INCLUDE "text/MrPsychicsHouse.asm"
 
 INCLUDE "data/text/text_7.asm"
 
+INCLUDE "engine/battle/just_slot_machine_stuff.asm" 
 
 SECTION "Text 8", ROMX
 
@@ -256,9 +257,13 @@ INCLUDE "text/SaffronCity.asm"
 INCLUDE "data/text/text_9.asm"
 
 
-SECTION "Pokédex Text", ROMX
+SECTION "Pokédex Text 1", ROMX
 
-INCLUDE "data/pokemon/dex_text.asm"
+INCLUDE "data/pokemon/dex_text1.asm"
+
+SECTION "Pokédex Text 2", ROMX
+
+INCLUDE "data/pokemon/dex_text2.asm"
 
 
 SECTION "Move Names", ROMX

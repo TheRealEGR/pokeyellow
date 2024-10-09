@@ -10,6 +10,8 @@ Route18WildMons:
 	db 24, FEAROW
 	db 25, RATICATE
 	db 26, RATICATE
+	db 29, HAPPINY
+	db 28, MUNCHLAX
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

@@ -10,6 +10,8 @@ Route15WildMons:
 	db 30, WEEPINBELL
 	db 27, VENONAT
 	db 30, VENOMOTH
+	db 26, DITTO
+	db 25, ODDISH
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

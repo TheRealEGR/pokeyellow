@@ -1,6 +1,6 @@
 	db DEX_PIDGEOT ; pokedex id
 
-	db  83,  80,  75,  91,  70
+	db  83,  80,  75, 101,  70
 	;   hp  atk  def  spd  spc
 
 	db NORMAL, FLYING ; type
@@ -20,4 +20,5 @@
 	     FLY
 	; end
 
-	db 0 ; padding
+	db BANK(PidgeotPicFront)
+	assert BANK(PidgeotPicFront) == BANK(PidgeotPicBack)

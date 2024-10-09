@@ -17,7 +17,8 @@
 	tmhm SWORDS_DANCE, TOXIC,        BODY_SLAM,    TAKE_DOWN,    DOUBLE_EDGE,  \
 	     HYPER_BEAM,   RAGE,         MEGA_DRAIN,   SOLARBEAM,    MIMIC,        \
 	     DOUBLE_TEAM,  REFLECT,      BIDE,         REST,         SUBSTITUTE,   \
-	     CUT
+	     AMNESIA,      CUT
 	; end
 
-	db 0 ; padding
+	db BANK(VenusaurPicFront)
+	assert BANK(VenusaurPicFront) == BANK(VenusaurPicBack)

@@ -10,6 +10,8 @@ Route9WildMons:
 	db 18, NIDORINA
 	db 20, RATICATE
 	db 19, FEAROW
+	db 11, EKANS
+	db 17, EKANS
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

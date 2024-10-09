@@ -10,6 +10,8 @@ Route7WildMons:
 	db 19, JIGGLYPUFF
 	db 24, JIGGLYPUFF
 	db 24, JIGGLYPUFF
+	db 17, MEOWTH
+	db 20, MEOWTH
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

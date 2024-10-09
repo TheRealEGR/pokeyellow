@@ -10,6 +10,8 @@ Route24WildMons:
 	db 16, VENONAT
 	db 17, PIDGEY
 	db 17, PIDGEOTTO
+	db	8, ABRA
+	db 12, ABRA
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

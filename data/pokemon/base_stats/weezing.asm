@@ -16,7 +16,8 @@
 	; tm/hm learnset
 	tmhm TOXIC,        HYPER_BEAM,   RAGE,         THUNDERBOLT,  THUNDER,      \
 	     MIMIC,        DOUBLE_TEAM,  BIDE,         SELFDESTRUCT, FIRE_BLAST,   \
-	     REST,         EXPLOSION,    SUBSTITUTE
+	     REST,         EXPLOSION,    SUBSTITUTE,   FLAMETHROWER
 	; end
 
-	db 0 ; padding
+	db BANK(WeezingPicFront)
+	assert BANK(WeezingPicFront) == BANK(WeezingPicBack)

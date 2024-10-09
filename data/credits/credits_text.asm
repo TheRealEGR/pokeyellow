@@ -87,10 +87,12 @@ CreditsTextPointers:
 	dw CreditsText_Nakamichi
 	dw CreditsText_Yoshimura
 	dw CreditsText_Yamazaki
+	dw CreditsText_HugeThanks
+	dw CreditsText_MainHacking
 	assert_table_length NUM_CRED_STRINGS
 
 CreditsText_Version:
-	db -6, "YELLOW VERSION"
+	db -6, "YELLOW CROSSGEN"
 	next   "    STAFF@"
 CreditsText_Tajiri:
 	db -6, "SATOSHI TAJIRI@"
@@ -265,3 +267,7 @@ CreditsText_Yoshimura:
 	db -6, "KAMON YOSHIMURA@"
 CreditsText_Yamazaki:
 	db -6, "SAKAE YAMAZAKI@"
+CreditsText_HugeThanks:
+	db -6, "PRET DISCORD SERVER@"
+CreditsText_MainHacking:
+	db -6, "THEREALEGR@"

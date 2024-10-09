@@ -418,6 +418,16 @@ _GolbatDexEntry::
 	next "and suck blood"
 	dex
 
+_CrobatDexEntry::
+	text "As a result of its"
+	next "pursuit of faster,"
+	next "yet more silent"
+	
+	page "flight, a new set"
+	next "of wings grew on"
+	next "its hind legs"
+	dex
+
 _OddishDexEntry::
 	text "It may be mistaken"
 	next "for a clump of"
@@ -618,6 +628,16 @@ _PoliwrathDexEntry::
 	next "swimmers"
 	dex
 
+_PolitoedDexEntry::
+	text "If POLIWAG and"
+	next "POLIWHIRL hear its"
+	next "echoing cry, they"
+	
+	page "respond by"
+	next "gathering from"
+	next "far and wide."
+	dex
+
 _AbraDexEntry::
 	text "Sleeps 18 hours a"
 	next "day. If it senses"
@@ -816,6 +836,16 @@ _MagnetonDexEntry::
 	page "perature by 3.6F"
 	next "degrees within"
 	next "3,300 feet"
+	dex
+
+_MagnezoneDexEntry::
+	text "It evolved from"
+	next "exposure to a"
+	next "special magnetic"
+	
+	page "field. Three"
+	next "units generate"
+	next "magnetism."
 	dex
 
 _FarfetchdDexEntry::
@@ -1048,6 +1078,16 @@ _MarowakDexEntry::
 	next "over the ages"
 	dex
 
+_TyrogueDexEntry::
+	text "It is always bursting"
+	next "with energy. To make"
+	next "itself stronger, it"
+	
+	next "keeps on fighting"
+	next "even if it loses."
+	next
+	dex
+
 _HitmonleeDexEntry::
 	text "When kicking, the"
 	next "sole of its foot"
@@ -1066,6 +1106,16 @@ _HitmonchanDexEntry::
 	page "through a concrete"
 	next "wall in the same"
 	next "way as a drill"
+	dex
+
+_HitmontopDexEntry::
+	text "If you become"
+	next "enchanted by its"
+	next "smooth, elegant,"
+	
+	page "dance-like kicks,"
+	next "you may get drilled"
+	next "hard."
 	dex
 
 _LickitungDexEntry::
@@ -1116,6 +1166,26 @@ _RhydonDexEntry::
 	next "hide even repels"
 	next "molten lava"
 	dex
+	
+_RhyperiorDexEntry::
+	text "It puts rocks in"
+	next "holes in its palms"
+	next "and uses its "
+	
+	page "muscles to shoot"
+	next "them. GEODUDE are"
+	next "shot at rare times."
+	dex
+
+_HappinyDexEntry::
+	text "It likes to carry"
+	next "around a small rock."
+	next "It may wander around"
+	
+	page "others' feet and"
+	next "cause them to"
+	next "stumble."
+	dex
 
 _ChanseyDexEntry::
 	text "A gentle and kind-"
@@ -1127,6 +1197,16 @@ _ChanseyDexEntry::
 	next "injured #MON"
 	dex
 
+_BlisseyDexEntry::
+	text "Anyone who takes even"
+	next "one bite of BLISSEY's"
+	next "egg becomes"
+	
+	page "unfailingly caring"
+	next "and pleasant to"
+	next "everyone."
+	dex
+
 _TangelaDexEntry::
 	text "Its identity is"
 	next "obscured by masses"
@@ -1135,6 +1215,16 @@ _TangelaDexEntry::
 	page "vines. The vines"
 	next "are said to never"
 	next "stop growing"
+	dex
+
+_TangrowthDexEntry::
+	text "It ensnares prey"
+	next "by extending arms"
+	next "made of vines."
+	
+	page "Losing arms to"
+	next "predators does"
+	next "not trouble it."
 	dex
 
 _KangaskhanDexEntry::
@@ -1165,6 +1255,16 @@ _SeadraDexEntry::
 	page "its tail to coral"
 	next "to stay in place"
 	next "while sleeping"
+	dex
+
+_KingdraDexEntry::
+	text "It is said that"
+	next "it usually hides"
+	next "in underwater caves."
+	
+	page "It can create"
+	next "whirlpools by"
+	next "yawning."
 	dex
 
 _GoldeenDexEntry::
@@ -1227,6 +1327,16 @@ _ScytherDexEntry::
 	next "that of a ninja"
 	dex
 
+_ScizorDexEntry::
+	text "It swings its"
+	next "eye-patterned pincers"
+	next "up to scare its foes."
+	
+	page "This makes it"
+	next "look like it has"
+	next "three heads."
+	dex
+	
 _JynxDexEntry::
 	text "Appears to move"
 	next "to a rhythm of"
@@ -1235,6 +1345,16 @@ _JynxDexEntry::
 	page "were dancing. It"
 	next "wiggles its hips"
 	next "as it walks"
+	dex
+
+_ElekidDexEntry::
+	text "It rotates its arms"
+	next "to generate"
+	next "electricity, but it"
+	
+	page "tires easily,so it "
+	next "charges up only a"
+	next "little bit."
 	dex
 
 _ElectabuzzDexEntry::
@@ -1247,6 +1367,26 @@ _ElectabuzzDexEntry::
 	next "at a power plant"
 	dex
 
+_ElectivireDexEntry::
+	text "It pushes the tips"
+	next "of its two tails"
+	next "against the foe,"
+	
+	page "then lets loose"
+	next "with over 20,000"
+	next "volts of power."
+	dex
+
+_MagbyDexEntry::
+	text "Each and every time"
+	next "it inhales and"
+	next "exhales, hot embers"
+	
+	page "dribble out of"
+	next "its mouth and"
+	next "nostrils."
+	dex
+
 _MagmarDexEntry::
 	text "Born in an active"
 	next "volcano. Its body"
@@ -1255,6 +1395,16 @@ _MagmarDexEntry::
 	page "in flames, so it"
 	next "looks like a big"
 	next "ball of fire"
+	dex
+
+_MagmortarDexEntry::
+	text "It blasts fireballs"
+	next "of over "
+	next "3,600 degrees F from"
+	
+	page "the ends of its"
+	next "arms. It lives in"
+	next "volcanic craters."
 	dex
 
 _PinsirDexEntry::
@@ -1357,6 +1507,16 @@ _FlareonDexEntry::
 	next "3,000F degrees"
 	dex
 
+_EspeonDexEntry::
+	text "It uses the fine"
+	next "hair that covers"
+	next "its body to sense"
+	
+	page "air currents and"
+	next "predict its enemy's"
+	next "actions."
+	dex
+	
 _PorygonDexEntry::
 	text "The only #MON"
 	next "people anticipate"
@@ -1365,6 +1525,25 @@ _PorygonDexEntry::
 	page "space. None has"
 	next "managed the feat"
 	next "yet, however"
+	dex
+
+_Porygon2DexEntry::
+	text "This upgraded"
+	next "version of PORYGON"
+	next "is designed for"
+	
+	page "space exploration."
+	next "It can't fly, though."
+	dex
+
+_PorygonZDexEntry::
+	text "Additional software"
+	next "was installed to"
+	next "make it a better"
+	
+	page "#MON. It began"
+	next "acting oddly,"
+	next "however."
 	dex
 
 _OmanyteDexEntry::

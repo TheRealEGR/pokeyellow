@@ -18,7 +18,9 @@
 	     DOUBLE_EDGE,  SUBMISSION,   COUNTER,      SEISMIC_TOSS, RAGE,         \
 	     PSYCHIC_M,    TELEPORT,     MIMIC,        DOUBLE_TEAM,  REFLECT,      \
 	     BIDE,         METRONOME,    SKULL_BASH,   REST,         THUNDER_WAVE, \
-	     PSYWAVE,      TRI_ATTACK,   SUBSTITUTE,   FLASH
+	     PSYWAVE,      TRI_ATTACK,   SUBSTITUTE,   FIRE_PUNCH,   ICE_PUNCH,    \
+		 THUNDERPUNCH, FLASH
 	; end
 
-	db 0 ; padding
+	db BANK(AbraPicFront)
+	assert BANK(AbraPicFront) == BANK(AbraPicBack)

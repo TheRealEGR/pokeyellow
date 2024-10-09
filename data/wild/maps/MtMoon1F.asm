@@ -9,7 +9,9 @@ MtMoon1FWildMons:
 	db 10, GEODUDE
 	db 11, ZUBAT
 	db 12, SANDSHREW
-	db 11, CLEFAIRY
+	db 11, CLEFFA
+	db	8, PARAS
+	db 10, PARAS
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

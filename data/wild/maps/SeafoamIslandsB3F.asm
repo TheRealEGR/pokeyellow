@@ -10,6 +10,8 @@ SeafoamIslandsB3FWildMons:
 	db 30, SEEL
 	db 28, DEWGONG
 	db 32, DEWGONG
+	db 39, SMOOCHUM
+	db 44, JYNX
 	end_grass_wildmons
 
 	def_water_wildmons 5 ; encounter rate
@@ -23,4 +25,6 @@ SeafoamIslandsB3FWildMons:
 	db 30, STARYU
 	db 30, STARYU
 	db 30, STARYU
+	db 30, SHELLDER
+	db 30, MAGIKARP
 	end_water_wildmons

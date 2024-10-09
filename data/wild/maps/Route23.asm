@@ -10,6 +10,8 @@ Route23WildMons:
 	db 45, FEAROW
 	db 41, PRIMEAPE
 	db 46, PRIMEAPE
+	db 26, EKANS
+	db 41, ARBOK
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate
