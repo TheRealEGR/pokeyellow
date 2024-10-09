@@ -10,6 +10,8 @@ SafariZoneCenterWildMons:
 	db 32, PARASECT
 	db 22, TANGELA
 	db  7, CHANSEY
+	db 23, SCYTHER
+	db 23, PINSIR
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

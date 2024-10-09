@@ -10,6 +10,8 @@ VictoryRoad2FWildMons:
 	db 47, ONIX
 	db 39, MACHOKE
 	db 42, MACHOKE
+	db 40, VENOMOTH
+	db 45, ONIX
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

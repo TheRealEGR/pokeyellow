@@ -86,6 +86,8 @@
 	const CRED_NAKAMICHI             ; 53
 	const CRED_YOSHIMURA             ; 54
 	const CRED_YAMAZAKI              ; 55
+	const CRED_HUGE_THANKS           ; 56
+	const CRED_MAIN_HACKING
 DEF NUM_CRED_STRINGS EQU const_value
 
 	const_def -1, -1

@@ -10,6 +10,8 @@ VictoryRoad1FWildMons:
 	db 45, ONIX
 	db 41, GRAVELER
 	db 47, GRAVELER
+	db 41, MACHOKE
+	db 40, MAROWAK
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

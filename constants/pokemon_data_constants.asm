@@ -80,8 +80,8 @@ DEF HOF_TEAM_CAPACITY EQU 50
 ; Evolution types
 	const_def 1
 	const EVOLVE_LEVEL ; 1
-	const EVOLVE_ITEM  ; 2
-	const EVOLVE_TRADE ; 3
+	const EVOLVE_TRADE ; 2
+	const EVOLVE_ITEM ; 3
 
 
 ; wMonHGrowthRate values
@@ -96,5 +96,5 @@ DEF HOF_TEAM_CAPACITY EQU 50
 DEF NUM_GROWTH_RATES EQU const_value
 
 ; wild data (see data/wild/maps/*.asm)
-DEF NUM_WILDMONS EQU 10
+DEF NUM_WILDMONS EQU 12
 DEF WILDDATA_LENGTH EQU 1 + NUM_WILDMONS * 2

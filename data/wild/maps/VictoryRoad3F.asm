@@ -10,6 +10,8 @@ VictoryRoad3FWildMons:
 	db 45, MACHOKE
 	db 47, GRAVELER
 	db 47, GRAVELER
+	db 43, MAROWAK
+	db 40, VENOMOTH
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

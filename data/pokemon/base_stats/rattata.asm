@@ -1,6 +1,6 @@
 	db DEX_RATTATA ; pokedex id
 
-	db  30,  56,  35,  72,  25
+	db  30,  56,  35,  72,  35
 	;   hp  atk  def  spd  spc
 
 	db NORMAL, NORMAL ; type
@@ -20,4 +20,5 @@
 	     SKULL_BASH,   REST,         SUBSTITUTE
 	; end
 
-	db 0 ; padding
+	db BANK(RattataPicFront)
+	assert BANK(RattataPicFront) == BANK(RattataPicBack)

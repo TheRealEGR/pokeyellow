@@ -1,6 +1,6 @@
 	db DEX_BUTTERFREE ; pokedex id
 
-	db  60,  45,  50,  70,  80
+	db  60,  45,  50,  70,  90
 	;   hp  atk  def  spd  spc
 
 	db BUG, FLYING ; type
@@ -20,4 +20,5 @@
 	     SWIFT,        REST,         PSYWAVE,      SUBSTITUTE,   FLASH
 	; end
 
-	db 0 ; padding
+	db BANK(ButterfreePicFront)
+	assert BANK(ButterfreePicFront) == BANK(ButterfreePicBack)

@@ -1,6 +1,6 @@
 	db DEX_ELECTRODE ; pokedex id
 
-	db  60,  50,  70, 140,  80
+	db  60,  50,  70, 150,  80
 	;   hp  atk  def  spd  spc
 
 	db ELECTRIC, ELECTRIC ; type
@@ -20,4 +20,5 @@
 	     THUNDER_WAVE, EXPLOSION,    SUBSTITUTE,   FLASH
 	; end
 
-	db 0 ; padding
+	db BANK(ElectrodePicFront)
+	assert BANK(ElectrodePicFront) == BANK(ElectrodePicBack)

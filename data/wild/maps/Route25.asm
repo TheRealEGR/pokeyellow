@@ -10,6 +10,8 @@ Route25WildMons:
 	db 16, VENONAT
 	db 17, PIDGEY
 	db 17, PIDGEOTTO
+	db 12, WEEDLE
+	db 12, KAKUNA
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

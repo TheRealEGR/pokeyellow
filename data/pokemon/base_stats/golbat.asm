@@ -10,7 +10,7 @@
 	INCBIN "gfx/pokemon/front/golbat.pic", 0, 1 ; sprite dimensions
 	dw GolbatPicFront, GolbatPicBack
 
-	db LEECH_LIFE, SCREECH, BITE, NO_MOVE ; level 1 learnset
+	db ABSORB, SCREECH, BITE, NO_MOVE ; level 1 learnset
 	db GROWTH_MEDIUM_FAST ; growth rate
 
 	; tm/hm learnset
@@ -19,4 +19,5 @@
 	     BIDE,         SWIFT,        REST,         SUBSTITUTE
 	; end
 
-	db 0 ; padding
+	db BANK(GolbatPicFront)
+	assert BANK(GolbatPicFront) == BANK(GolbatPicBack)

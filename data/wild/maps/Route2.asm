@@ -10,6 +10,8 @@ Route2WildMons:
 	db  6, NIDORAN_F
 	db  7, PIDGEY
 	db  7, PIDGEY
+	db	3, WEEDLE
+	db	3, CATERPIE
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

@@ -1,4 +1,4 @@
-SECTION "bank1", ROMX
+SECTION "Misc 1", ROMX
 
 INCLUDE "data/sprites/facings.asm"
 INCLUDE "engine/battle/safari_zone.asm"
@@ -33,13 +33,12 @@ INCLUDE "engine/battle/move_effects/drain_hp.asm"
 INCLUDE "engine/menus/players_pc.asm"
 INCLUDE "engine/pokemon/remove_mon.asm"
 INCLUDE "engine/events/display_pokedex.asm"
-
-
-SECTION "bank3", ROMX
-
 INCLUDE "engine/joypad.asm"
 INCLUDE "engine/overworld/clear_variables.asm"
 INCLUDE "engine/overworld/player_state.asm"
+
+SECTION "Misc 2", ROMX
+
 INCLUDE "engine/events/poison.asm"
 INCLUDE "engine/overworld/tilesets.asm"
 INCLUDE "engine/overworld/daycare_exp.asm"
@@ -66,8 +65,7 @@ INCLUDE "engine/events/hidden_objects/elevator.asm"
 INCLUDE "engine/events/hidden_objects/town_map.asm"
 INCLUDE "engine/events/hidden_objects/pokemon_stuff.asm"
 
-
-SECTION "bank4", ROMX
+SECTION "Misc 3", ROMX
 
 INCLUDE "gfx/font.asm"
 INCLUDE "engine/pokemon/status_screen.asm"
@@ -75,7 +73,8 @@ INCLUDE "engine/menus/party_menu.asm"
 INCLUDE "gfx/player.asm"
 INCLUDE "engine/menus/start_sub_menus.asm"
 INCLUDE "engine/items/tms.asm"
-
+INCLUDE "engine/gfx/load_pokedex_tiles.asm"
+INCLUDE "engine/overworld/map_sprites.asm"
 
 SECTION "Battle Engine 1", ROMX
 
@@ -84,18 +83,11 @@ INCLUDE "engine/battle/wild_encounters.asm"
 INCLUDE "engine/battle/move_effects/recoil.asm"
 INCLUDE "engine/battle/move_effects/conversion.asm"
 INCLUDE "engine/battle/move_effects/haze.asm"
-
-
-SECTION "bank5", ROMX
-
-INCLUDE "engine/gfx/load_pokedex_tiles.asm"
-INCLUDE "engine/overworld/map_sprites.asm"
-
+INCLUDE "engine/battle/move_effects/substitute.asm"
+INCLUDE "engine/menus/pc.asm"
 
 SECTION "Battle Engine 2", ROMX
 
-INCLUDE "engine/battle/move_effects/substitute.asm"
-INCLUDE "engine/menus/pc.asm"
 
 
 SECTION "Doors and Ledges", ROMX
@@ -147,6 +139,7 @@ INCLUDE "engine/items/tmhm.asm"
 INCLUDE "engine/pikachu/respawn_overworld_pikachu.asm"
 INCLUDE "engine/battle/scale_sprites.asm"
 INCLUDE "engine/slots/game_corner_slots2.asm"
+INCLUDE "data/moves/moves.asm"
 
 
 SECTION "Slot Machines", ROMX
@@ -158,7 +151,6 @@ INCLUDE "engine/slots/game_corner_slots.asm"
 
 SECTION "Battle Engine 6", ROMX
 
-INCLUDE "data/moves/moves.asm"
 INCLUDE "data/pokemon/base_stats.asm"
 INCLUDE "data/pokemon/cries.asm"
 INCLUDE "engine/battle/trainer_ai.asm"
@@ -171,6 +163,41 @@ SECTION "Battle Core", ROMX
 
 INCLUDE "engine/battle/core.asm"
 INCLUDE "engine/battle/effects.asm"
+
+LoadBackSpriteUnzoomed:
+	ld a, $66
+	ld de, vBackPic
+	push de
+	jp LoadUncompressedBackSprite
+
+; calculates the three byte number starting at [bc]
+; minus the three byte number starting at [hl]
+; and stores it into the three bytes starting at [de]
+; assumes that [hl] is smaller than [bc]
+SubThreeByteNum:
+	call .subByte
+	call .subByte
+.subByte
+	ld a, [bc]
+	inc bc
+	sub [hl]
+	inc hl
+	ld [de], a
+	jr nc, .noCarry
+	dec de
+	ld a, [de]
+	dec a
+	ld [de], a
+	inc de
+.noCarry
+	inc de
+	ret
+
+; return the address of the BattleMon's party struct attribute in hl
+BattleMonPartyAttr:
+	ld a, [wPlayerMonNumber]
+	ld bc, wPartyMon2 - wPartyMon1
+	jp AddNTimes
 
 
 SECTION "bank10", ROMX
@@ -424,3 +451,5 @@ INCLUDE "engine/pikachu/pikachu_emotions.asm"
 INCLUDE "engine/pikachu/pikachu_movement.asm"
 INCLUDE "engine/pikachu/pikachu_pic_animation.asm"
 INCLUDE "engine/debug/debug_menu.asm"
+
+

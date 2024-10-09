@@ -10,6 +10,8 @@ Route10WildMons:
 	db 20, RATICATE
 	db 16, MACHOP
 	db 18, MACHOP
+	db 11, EKANS
+	db 17, EKANS
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

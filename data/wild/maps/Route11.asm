@@ -10,6 +10,8 @@ Route11WildMons:
 	db 20, PIDGEOTTO
 	db 19, DROWZEE
 	db 17, RATICATE
+	db 12, EKANS
+	db 15, EKANS
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

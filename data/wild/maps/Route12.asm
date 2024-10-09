@@ -10,6 +10,8 @@ Route12WildMons:
 	db 29, WEEPINBELL
 	db 26, FARFETCHD
 	db 31, FARFETCHD
+	db 24, VENONAT
+	db 26, VENONAT
 	end_grass_wildmons
 
 	def_water_wildmons 3 ; encounter rate
@@ -23,4 +25,6 @@ Route12WildMons:
 	db 15, SLOWPOKE
 	db 15, SLOWBRO
 	db 20, SLOWBRO
+	db	5, TENTACOOL
+	db 15, KRABBY
 	end_water_wildmons

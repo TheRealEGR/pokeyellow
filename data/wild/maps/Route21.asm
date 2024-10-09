@@ -10,6 +10,8 @@ Route21WildMons:
 	db 17, PIDGEOTTO
 	db 19, PIDGEOTTO
 	db 15, PIDGEOTTO
+	db 15, TANGELA
+	db 19, TANGELA
 	end_grass_wildmons
 
 	def_water_wildmons 5 ; encounter rate
@@ -23,4 +25,6 @@ Route21WildMons:
 	db 30, TENTACOOL
 	db 35, TENTACOOL
 	db 40, TENTACOOL
+	db 15, TENTACRUEL
+	db 30, TENTACRUEL
 	end_water_wildmons

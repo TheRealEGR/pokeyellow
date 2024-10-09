@@ -52,7 +52,7 @@ DEF SAFARI_ROCK EQU CASCADEBADGE ; overload
 	const DOME_FOSSIL   ; $29
 	const HELIX_FOSSIL  ; $2A
 	const SECRET_KEY    ; $2B
-	const ITEM_2C       ; $2C
+	const SUN_STONE     ; $2C
 	const BIKE_VOUCHER  ; $2D
 	const X_ACCURACY    ; $2E
 	const LEAF_STONE    ; $2F
@@ -116,7 +116,7 @@ DEF NUM_FLOORS EQU const_value - 1 - NUM_ITEMS
 ; HMs are defined before TMs, so the actual number of TM definitions
 ; is not yet available. The TM quantity is hard-coded here and must
 ; match the actual number below.
-DEF NUM_TMS EQU 50
+DEF NUM_TMS EQU 55
 
 DEF __tmhm_value__ = NUM_TMS + 1
 
@@ -207,6 +207,11 @@ DEF TM01 EQU const_value
 	add_tm ROCK_SLIDE   ; $F8
 	add_tm TRI_ATTACK   ; $F9
 	add_tm SUBSTITUTE   ; $FA
+	add_tm FLAMETHROWER ; $FB
+	add_tm FIRE_PUNCH   ; $FC
+	add_tm ICE_PUNCH    ; $FD
+	add_tm THUNDERPUNCH ; $FE
+	add_tm AMNESIA      ; $FF
 ASSERT NUM_TMS == const_value - TM01, "NUM_TMS ({d:NUM_TMS}) does not match the number of add_tm definitions"
 
 DEF NUM_TM_HM EQU NUM_TMS + NUM_HMS

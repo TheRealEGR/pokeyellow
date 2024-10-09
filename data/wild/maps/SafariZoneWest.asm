@@ -10,6 +10,8 @@ SafariZoneWestWildMons:
 	db 24, MAROWAK
 	db 25, PINSIR
 	db 27, TANGELA
+	db 26, DODUO
+	db 28, KANGASKHAN
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

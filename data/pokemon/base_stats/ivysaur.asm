@@ -16,7 +16,9 @@
 	; tm/hm learnset
 	tmhm SWORDS_DANCE, TOXIC,        BODY_SLAM,    TAKE_DOWN,    DOUBLE_EDGE,  \
 	     RAGE,         MEGA_DRAIN,   SOLARBEAM,    MIMIC,        DOUBLE_TEAM,  \
-	     REFLECT,      BIDE,         REST,         SUBSTITUTE,   CUT
+	     REFLECT,      BIDE,         REST,         SUBSTITUTE,   AMNESIA,      \
+		 CUT
 	; end
 
-	db 0 ; padding
+	db BANK(IvysaurPicFront)
+	assert BANK(IvysaurPicFront) == BANK(IvysaurPicBack)

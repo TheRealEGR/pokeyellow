@@ -900,7 +900,7 @@ AnyEnemyPokemonAliveCheck:
 ; stores whether enemy ran in Z flag
 ReplaceFaintedEnemyMon:
 	ld hl, wEnemyHPBarColor
-	ld e, $30
+	ld e, $00
 	call GetBattleHealthBarColor
 	ldpal a, SHADE_BLACK, SHADE_DARK, SHADE_LIGHT, SHADE_WHITE
 	ldh [rOBP0], a
@@ -1189,6 +1189,14 @@ HandlePlayerBlackOut:
 .notRival1Battle
 	ld b, SET_PAL_BATTLE_BLACK
 	call RunPaletteCommand
+
+	ldh a, [hGBC]
+	and a
+	jr z, .notGBC
+	ld c, 11
+	farcall LoadBGMapAttributes
+.notGBC
+
 	ld hl, PlayerBlackedOutText2
 	ld a, [wLinkState]
 	cp LINK_STATE_BATTLING
@@ -1896,7 +1904,6 @@ DrawPlayerHUDAndHPBar:
 	ld [hl], $73
 	ld de, wBattleMonNick
 	hlcoord 10, 7
-	call CenterMonName
 	call PlaceString
 	ld hl, wBattleMonSpecies
 	ld de, wLoadedMon
@@ -1957,7 +1964,7 @@ DrawEnemyHUDAndHPBar:
 	hlcoord 1, 0
 	call CenterMonName
 	call PlaceString
-	hlcoord 4, 1
+	hlcoord 6, 1
 	push hl
 	inc hl
 	ld de, wEnemyMonStatus
@@ -6518,7 +6525,7 @@ LoadPlayerBackPic:
 	ASSERT BANK(RedPicBack) == BANK(OldManPicBack)
 	ASSERT BANK(RedPicBack) == BANK(ProfOakPicBack)
 	call UncompressSpriteFromDE
-	predef ScaleSpriteByTwo
+	call LoadBackSpriteUnzoomed
 	ld hl, wShadowOAM
 	xor a
 	ldh [hOAMTile], a ; initial tile number
@@ -6552,8 +6559,6 @@ LoadPlayerBackPic:
 	ld e, a
 	dec b
 	jr nz, .loop
-	ld de, vBackPic
-	call InterlaceMergeSpriteBuffers
 	ld a, $0
 	call SwitchSRAMBankAndLatchClockData
 	ld hl, vSprites

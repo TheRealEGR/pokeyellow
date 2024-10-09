@@ -10,6 +10,8 @@ Route17WildMons:
 	db 28, DODUO
 	db 32, PONYTA
 	db 29, DODRIO
+	db 29, RATICATE
+	db 22, HAPPINY
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

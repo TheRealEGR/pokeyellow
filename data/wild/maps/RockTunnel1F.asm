@@ -10,6 +10,8 @@ RockTunnel1FWildMons:
 	db 17, MACHOP
 	db 19, MACHOP
 	db 21, MACHOP
+	db 13, ONIX
+	db 15, ONIX
 	end_grass_wildmons
 
 	def_water_wildmons 0 ; encounter rate

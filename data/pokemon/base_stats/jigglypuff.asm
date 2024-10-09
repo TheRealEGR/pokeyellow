@@ -1,6 +1,6 @@
 	db DEX_JIGGLYPUFF ; pokedex id
 
-	db 115,  45,  20,  20,  25
+	db 115,  45,  20,  20,  45
 	;   hp  atk  def  spd  spc
 
 	db NORMAL, NORMAL ; type
@@ -23,4 +23,5 @@
 	     STRENGTH,     FLASH
 	; end
 
-	db 0 ; padding
+	db BANK(JigglypuffPicFront)
+	assert BANK(JigglypuffPicFront) == BANK(JigglypuffPicBack)
