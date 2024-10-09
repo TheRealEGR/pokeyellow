@@ -10,8 +10,8 @@ SilphCo9F_Script:
 
 SilphCo9FGateCallbackScript:
 	ld hl, wCurrentMapScriptFlags
-	bit BIT_CUR_MAP_LOADED_1, [hl]
-	res BIT_CUR_MAP_LOADED_1, [hl]
+	bit 5, [hl]
+	res 5, [hl]
 	ret z
 	ld hl, .GateCoordinates
 	call SilphCo9F_SetCardKeyDoorYScript

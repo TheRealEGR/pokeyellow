@@ -13,7 +13,7 @@ _GivePokemon::
 ; add to box
 	xor a
 	ld [wEnemyBattleStatus3], a
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	ld [wEnemyMonSpecies2], a
 	callfar LoadEnemyMonData
 	call SetPokedexOwnedFlag
@@ -54,18 +54,18 @@ _GivePokemon::
 	ret
 
 SetPokedexOwnedFlag:
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	push af
-	ld [wPokedexNum], a
+	ld [wd11e], a
 	predef IndexToPokedex
-	ld a, [wPokedexNum]
+	ld a, [wd11e]
 	dec a
 	ld c, a
 	ld hl, wPokedexOwned
 	ld b, FLAG_SET
 	predef FlagActionPredef
 	pop af
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	ld hl, GotMonText
 	jp PrintText

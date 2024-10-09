@@ -3,7 +3,7 @@ LearnMove:
 	ld a, [wWhichPokemon]
 	ld hl, wPartyMonNicks
 	call GetPartyMonName
-	ld hl, wNameBuffer
+	ld hl, wcd6d
 	ld de, wLearnMoveMonName
 	ld bc, NAME_LENGTH
 	call CopyData
@@ -29,7 +29,7 @@ DontAbandonLearning:
 	jp c, AbandonLearning
 	push hl
 	push de
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMoveName
 	ld hl, OneTwoAndText
 	call PrintText
@@ -126,11 +126,11 @@ TryingToLearn:
 	hlcoord 6, 8
 	ld de, wMovesString
 	ldh a, [hUILayoutFlags]
-	set BIT_SINGLE_SPACED_LINES, a
+	set 2, a
 	ldh [hUILayoutFlags], a
 	call PlaceString
 	ldh a, [hUILayoutFlags]
-	res BIT_SINGLE_SPACED_LINES, a
+	res 2, a
 	ldh [hUILayoutFlags], a
 	ld hl, wTopMenuItemY
 	ld a, 8
@@ -146,10 +146,10 @@ TryingToLearn:
 	ld [hli], a ; wMenuWatchedKeys
 	ld [hl], 0 ; wLastMenuItem
 	ld hl, hUILayoutFlags
-	set BIT_DOUBLE_SPACED_MENU, [hl]
+	set 1, [hl]
 	call HandleMenuInput
 	ld hl, hUILayoutFlags
-	res BIT_DOUBLE_SPACED_MENU, [hl]
+	res 1, [hl]
 	push af
 	call LoadScreenTilesFromBuffer1
 	pop af

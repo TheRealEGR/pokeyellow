@@ -32,15 +32,15 @@ MoveSprite_::
 	ld [wNPCNumScriptedSteps], a ; number of steps taken
 
 	pop bc
-	ld hl, wStatusFlags5
-	set BIT_SCRIPTED_NPC_MOVEMENT, [hl]
+	ld hl, wd730
+	set 0, [hl]
 	pop hl
 	xor a
 	ld [wOverrideSimulatedJoypadStatesMask], a
 	ld [wSimulatedJoypadStatesEnd], a
 	dec a
 	ld [wJoyIgnore], a
-	ld [wUnusedOverrideSimulatedJoypadStatesIndex], a
+	ld [wUnusedCD3A], a
 	ret
 
 ; divides [hDividend2] by [hDivisor2] and stores the quotient in [hQuotient2]

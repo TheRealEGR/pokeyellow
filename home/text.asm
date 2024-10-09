@@ -63,7 +63,7 @@ PlaceNextChar::
 	jr nz, .NotNext
 	ld bc, 2 * SCREEN_WIDTH
 	ldh a, [hUILayoutFlags]
-	bit BIT_SINGLE_SPACED_LINES, a
+	bit 2, a
 	jr z, .ok
 	ld bc, SCREEN_WIDTH
 .ok
@@ -117,13 +117,13 @@ NullChar:: ; unused
 	pop hl
 	; A "<NULL>" character in a printed string
 	; displays an error message with the current value
-	; of hTextID in decimal format.
+	; of hSpriteIndexOrTextID in decimal format.
 	; This is a debugging leftover.
 	ld de, TextIDErrorText
 	dec de
 	ret
 
-TextIDErrorText:: ; "[hTextID] ERROR."
+TextIDErrorText:: ; "[hSpriteIndexOrTextID] ERROR."
 	text_far _TextIDErrorText
 	text_end
 
@@ -244,7 +244,7 @@ Paragraph::
 
 PageChar::
 	ldh a, [hUILayoutFlags]
-	bit BIT_PAGE_CHAR_IS_NEXT, a
+	bit 3, a
 	jr z, .pageChar
 	ld a, "<NEXT>"
 	jp PlaceNextChar.NotTerminator
@@ -322,7 +322,7 @@ ProtectedDelay3::
 TextCommandProcessor::
 	ld a, [wLetterPrintingDelayFlags]
 	push af
-	set BIT_TEXT_DELAY, a
+	set 1, a
 	ld e, a
 	ldh a, [hClearLetterPrintingDelayFlags]
 	xor e

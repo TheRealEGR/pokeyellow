@@ -53,13 +53,13 @@ Evolution_PartyMonLoop: ; loop over party mons
 	ld h, [hl]
 	ld l, a
 	push hl
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	push af
 	xor a ; PLAYER_PARTY_DATA
 	ld [wMonDataLocation], a
 	call LoadMonData
 	pop af
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	pop hl
 
 .evoEntryLoop ; loop over evolution entries
@@ -96,10 +96,10 @@ Evolution_PartyMonLoop: ; loop over party mons
 	ld a, [wIsInBattle] ; are we in battle?
 	and a
 	ld a, [hli]
-	jp nz, .nextEvoEntry1 ; don't evolve if we're in a battle as wCurPartySpecies could be holding the last mon sent out
+	jp nz, .nextEvoEntry1 ; don't evolve if we're in a battle as wcf91 could be holding the last mon sent out
 
 	ld b, a ; evolution item
-	ld a, [wCurItem]
+	ld a, [wcf91] ; last item used
 	cp b ; was the evolution item in this entry used?
 	jp nz, .nextEvoEntry1 ; if not, go to the next evolution entry
 .checkLevel
@@ -109,7 +109,7 @@ Evolution_PartyMonLoop: ; loop over party mons
 	cp b ; is the mon's level greater than the evolution requirement?
 	jp c, .nextEvoEntry2 ; if so, go the next evolution entry
 .doEvolution
-	ld [wCurEnemyLevel], a
+	ld [wCurEnemyLVL], a
 	ld a, 1
 	ld [wEvolutionOccurred], a
 	push hl
@@ -139,7 +139,7 @@ Evolution_PartyMonLoop: ; loop over party mons
 	call PrintText
 	pop hl
 	ld a, [hl]
-	ld [wCurSpecies], a
+	ld [wd0b5], a
 	ld [wLoadedMonSpecies], a
 	ld [wEvoNewSpecies], a
 	ld a, MONSTER_NAME
@@ -157,22 +157,22 @@ Evolution_PartyMonLoop: ; loop over party mons
 	call DelayFrames
 	call ClearScreen
 	call RenameEvolvedMon
-	ld a, [wPokedexNum]
+	ld a, [wd11e]
 	push af
-	ld a, [wCurSpecies]
-	ld [wPokedexNum], a
+	ld a, [wd0b5]
+	ld [wd11e], a
 	predef IndexToPokedex
-	ld a, [wPokedexNum]
+	ld a, [wd11e]
 	dec a
 	ld hl, BaseStats
 	ld bc, BASE_DATA_SIZE
 	call AddNTimes
 	ld de, wMonHeader
 	call CopyData
-	ld a, [wCurSpecies]
+	ld a, [wd0b5]
 	ld [wMonHIndex], a
 	pop af
-	ld [wPokedexNum], a
+	ld [wd11e], a
 	ld hl, wLoadedMonHPExp - 1
 	ld de, wLoadedMonStats
 	ld b, $1
@@ -207,8 +207,8 @@ Evolution_PartyMonLoop: ; loop over party mons
 	dec hl
 	pop bc
 	call CopyData
-	ld a, [wCurSpecies]
-	ld [wPokedexNum], a
+	ld a, [wd0b5]
+	ld [wd11e], a
 	xor a
 	ld [wMonDataLocation], a
 	call LearnMoveFromLevelUp
@@ -218,7 +218,7 @@ Evolution_PartyMonLoop: ; loop over party mons
 	and a
 	call z, Evolution_ReloadTilesetTilePatterns
 	predef IndexToPokedex
-	ld a, [wPokedexNum]
+	ld a, [wd11e]
 	dec a
 	ld c, a
 	ld b, FLAG_SET
@@ -264,15 +264,14 @@ Evolution_PartyMonLoop: ; loop over party mons
 RenameEvolvedMon:
 ; Renames the mon to its new, evolved form's standard name unless it had a
 ; nickname, in which case the nickname is kept.
-	assert wCurSpecies == wNameListIndex ; save+restore wCurSpecies while using wNameListIndex
-	ld a, [wCurSpecies]
+	ld a, [wd0b5]
 	push af
 	ld a, [wMonHIndex]
-	ld [wNameListIndex], a
+	ld [wd0b5], a
 	call GetName
 	pop af
-	ld [wCurSpecies], a
-	ld hl, wNameBuffer
+	ld [wd0b5], a
+	ld hl, wcd6d
 	ld de, wStringBuffer
 .compareNamesLoop
 	ld a, [de]
@@ -288,7 +287,7 @@ RenameEvolvedMon:
 	call AddNTimes
 	push hl
 	call GetName
-	ld hl, wNameBuffer
+	ld hl, wcd6d
 	pop de
 	jp CopyData
 
@@ -323,15 +322,15 @@ Evolution_ReloadTilesetTilePatterns:
 	jp ReloadTilesetTilePatterns
 
 LearnMoveFromLevelUp:
-	ld a, [wPokedexNum] ; species
-	ld [wCurPartySpecies], a
+	ld a, [wd11e] ; species
+	ld [wcf91], a
 	call GetMonLearnset
 .learnSetLoop ; loop over the learn set until we reach a move that is learnt at the current level or the end of the list
 	ld a, [hli]
 	and a ; have we reached the end of the learn set?
 	jr z, .done ; if we've reached the end of the learn set, jump
 	ld b, a ; level the move is learnt at
-	ld a, [wCurEnemyLevel]
+	ld a, [wCurEnemyLVL]
 	cp b ; is the move learnt at the mon's current level?
 	ld a, [hli] ; move ID
 	jr nz, .learnSetLoop
@@ -357,7 +356,7 @@ LearnMoveFromLevelUp:
 	jr nz, .checkCurrentMovesLoop
 	ld a, d
 	ld [wMoveNum], a
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMoveName
 	call CopyToStringBuffer
 	predef LearnMove
@@ -373,16 +372,16 @@ LearnMoveFromLevelUp:
 	jr nz, .done
 .foundThunderOrThunderbolt
 	ld a, $5
-	ld [wd49b], a
+	ld [wd49c], a
 	ld a, $85
 	ld [wPikachuMood], a
 .done
-	ld a, [wCurPartySpecies]
-	ld [wPokedexNum], a
+	ld a, [wcf91]
+	ld [wd11e], a
 	ret
 
 Func_3b079:
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	push af
 	call Func_3b0a2
 	jr c, .asm_3b09c
@@ -400,36 +399,37 @@ Func_3b079:
 	jr c, .asm_3b09c
 .asm_3b096
 	pop af
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	and a
 	ret
 .asm_3b09c
 	pop af
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	scf
 	ret
 
 Func_3b0a2:
-	ld a, [wTempTMHM]
+; XXX what is wcf91 entering this function?
+	ld a, [wd11e]
 	ld [wMoveNum], a
 	predef CanLearnTM
 	ld a, c
 	and a
 	jr nz, .asm_3b0ec
 	ld hl, Pointer_3b0ee
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	ld de, $1
 	call IsInArray
 	jr c, .asm_3b0d2
 	ld a, $ff
 	ld [wMonHGrowthRate], a
-	ld a, [wTempTMHM]
+	ld a, [wd11e]
 	ld hl, wMonHMoves
 	ld de, $1
 	call IsInArray
 	jr c, .asm_3b0ec
 .asm_3b0d2
-	ld a, [wTempTMHM]
+	ld a, [wd11e]
 	ld d, a
 	call GetMonLearnset
 .loop
@@ -437,7 +437,7 @@ Func_3b0a2:
 	and a
 	jr z, .asm_3b0ea
 	ld b, a
-	ld a, [wCurEnemyLevel]
+	ld a, [wCurEnemyLVL]
 	cp b
 	jr c, .asm_3b0ea
 	ld a, [hli]
@@ -472,7 +472,7 @@ Func_3b10f:
 	inc hl
 .asm_3b124
 	inc hl
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	cp [hl]
 	jr z, .asm_3b138
 	inc hl
@@ -489,11 +489,11 @@ Func_3b10f:
 .asm_3b138
 	inc c
 	ld a, c
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	scf
 	ret
 
-; writes the moves a mon has at level [wCurEnemyLevel] to [de]
+; writes the moves a mon has at level [wCurEnemyLVL] to [de]
 ; move slots are being filled up sequentially and shifted if all slots are full
 WriteMonMoves:
 	call GetPredefRegisters
@@ -511,7 +511,7 @@ WriteMonMoves:
 	and a
 	jp z, .done       ; end of list
 	ld b, a
-	ld a, [wCurEnemyLevel]
+	ld a, [wCurEnemyLVL]
 	cp b
 	jp c, .done       ; mon level < move level (assumption: learnset is sorted by level)
 	ld a, [wLearningMovesFromDayCare]
@@ -617,7 +617,7 @@ Evolution_FlagAction:
 GetMonLearnset:
 	ld hl, EvosMovesPointerTable
 	ld b, 0
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	dec a
 	ld c, a
 	add hl, bc

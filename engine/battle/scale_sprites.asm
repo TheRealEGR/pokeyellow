@@ -3,9 +3,9 @@
 ; resulting in a 7*7 tile output sprite chunk
 ScaleSpriteByTwo:
 	ld a, $0
-	call OpenSRAM
+	call SwitchSRAMBankAndLatchClockData
 	call .ScaleSpriteByTwo
-	call CloseSRAM
+	call PrepareRTCDataAndDisableSRAM
 	ret
 
 .ScaleSpriteByTwo:

@@ -5,8 +5,8 @@ CeladonPrizeMenu::
 	ld hl, RequireCoinCaseTextPtr
 	jp PrintText
 .havingCoinCase
-	ld hl, wStatusFlags5
-	set BIT_NO_TEXT_DELAY, [hl]
+	ld hl, wd730
+	set 6, [hl] ; disable letter-printing delay
 	ld hl, ExchangeCoinsForPrizesTextPtr
 	call PrintText
 ; the following are the menu settings
@@ -37,8 +37,8 @@ CeladonPrizeMenu::
 	jr z, .noChoice
 	call HandlePrizeChoice
 .noChoice
-	ld hl, wStatusFlags5
-	res BIT_NO_TEXT_DELAY, [hl]
+	ld hl, wd730
+	res 6, [hl]
 	ret
 
 RequireCoinCaseTextPtr:
@@ -55,14 +55,17 @@ WhichPrizeTextPtr:
 	text_end
 
 GetPrizeMenuId:
-; determine which one among the three prize texts has been selected using the text ID (stored in [hTextID])
-; prize texts' IDs are TEXT_GAMECORNERPRIZEROOM_PRIZE_VENDOR_1-TEXT_GAMECORNERPRIZEROOM_PRIZE_VENDOR_3
-; load the three prizes at wPrize1-wPrice3
-; load the three prices at wPrize1Price-wPrize3Price
-; display the three prizes' names, distinguishing between Pokemon names and item names (specifically TMs)
-	ldh a, [hTextID]
-	sub TEXT_GAMECORNERPRIZEROOM_PRIZE_VENDOR_1
-	ld [wWhichPrizeWindow], a ; prize texts' relative ID (i.e. 0-2)
+; determine which one among the three
+; prize-texts has been selected
+; using the text ID (stored in [hSpriteIndexOrTextID])
+; load the three prizes at wd13d-wd13f
+; load the three prices at wd141-wd146
+; display the three prizes' names
+; (distinguishing between Pokemon names
+; and Items (specifically TMs) names)
+	ldh a, [hSpriteIndexOrTextID]
+	sub 3       ; prize-texts' id are 3, 4 and 5
+	ld [wWhichPrizeWindow], a    ; prize-texts' id (relative, i.e. 0, 1 or 2)
 	add a
 	add a
 	ld d, 0
@@ -84,37 +87,37 @@ GetPrizeMenuId:
 	ld bc, 6
 	call CopyData
 	ld a, [wWhichPrizeWindow]
-	cp 2 ; is TM_menu?
+	cp 2        ;is TM_menu?
 	jr nz, .putMonName
 	ld a, [wPrize1]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetItemName
 	hlcoord 2, 4
 	call PlaceString
 	ld a, [wPrize2]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetItemName
 	hlcoord 2, 6
 	call PlaceString
 	ld a, [wPrize3]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetItemName
 	hlcoord 2, 8
 	call PlaceString
 	jr .putNoThanksText
 .putMonName
 	ld a, [wPrize1]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	hlcoord 2, 4
 	call PlaceString
 	ld a, [wPrize2]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	hlcoord 2, 6
 	call PlaceString
 	ld a, [wPrize3]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	hlcoord 2, 8
 	call PlaceString
@@ -190,7 +193,7 @@ HandlePrizeChoice:
 	ld hl, wPrize1
 	add hl, de
 	ld a, [hl]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	ld a, [wWhichPrizeWindow]
 	cp 2 ; is prize a TM?
 	jr nz, .getMonName
@@ -209,9 +212,9 @@ HandlePrizeChoice:
 	call HasEnoughCoins
 	jr c, .notEnoughCoins
 	ld a, [wWhichPrizeWindow]
-	cp 2 ; is prize a TM?
+	cp $02
 	jr nz, .giveMon
-	ld a, [wNamedObjectIndex]
+	ld a, [wd11e]
 	ld b, a
 	ld a, 1
 	ld c, a
@@ -219,8 +222,8 @@ HandlePrizeChoice:
 	jr nc, .bagFull
 	jr .subtractCoins
 .giveMon
-	ld a, [wNamedObjectIndex]
-	ld [wCurPartySpecies], a
+	ld a, [wd11e]
+	ld [wcf91], a
 	push af
 	call GetPrizeMonLevel
 	ld c, a
@@ -285,7 +288,7 @@ OhFineThenTextPtr:
 	text_end
 
 GetPrizeMonLevel:
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	ld b, a
 	ld hl, PrizeMonLevelDictionary
 .loop
@@ -296,7 +299,7 @@ GetPrizeMonLevel:
 	jr .loop
 .matchFound
 	ld a, [hl]
-	ld [wCurEnemyLevel], a
+	ld [wCurEnemyLVL], a
 	ret
 
 INCLUDE "data/events/prize_mon_levels.asm"

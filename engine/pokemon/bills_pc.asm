@@ -90,8 +90,8 @@ PKMNLeaguePCText: db "<PKMN>LEAGUE@"
 LogOffPCText:     db "LOG OFF@"
 
 BillsPC_::
-	ld hl, wStatusFlags5
-	set BIT_NO_TEXT_DELAY, [hl]
+	ld hl, wd730
+	set 6, [hl]
 	xor a
 	ld [wParentMenuItem], a
 	inc a               ; MONSTER_NAME
@@ -99,8 +99,8 @@ BillsPC_::
 	call LoadHpBarAndStatusTilePatterns
 	ld a, [wListScrollOffset]
 	push af
-	ld a, [wMiscFlags]
-	bit BIT_USING_GENERIC_PC, a
+	ld a, [wFlags_0xcd60]
+	bit 3, a ; accessing Bill's PC through another PC?
 	jr nz, BillsPCMenu
 ; accessing it directly
 	ld a, SFX_TURN_ON_PC
@@ -185,8 +185,8 @@ BillsPCMenu:
 	jp z, BillsPCPrintBox
 
 ExitBillsPC:
-	ld a, [wMiscFlags]
-	bit BIT_USING_GENERIC_PC, a
+	ld a, [wFlags_0xcd60]
+	bit 3, a ; accessing Bill's PC through another PC?
 	jr nz, .next
 ; accessing it directly
 	call LoadTextBoxTilePatterns
@@ -194,13 +194,13 @@ ExitBillsPC:
 	call PlaySound
 	call WaitForSoundToFinish
 .next
-	ld hl, wMiscFlags
-	res BIT_NO_MENU_BUTTON_SOUND, [hl]
+	ld hl, wFlags_0xcd60
+	res 5, [hl]
 	call LoadScreenTilesFromBuffer2
 	pop af
 	ld [wListScrollOffset], a
-	ld hl, wStatusFlags5
-	res BIT_NO_TEXT_DELAY, [hl]
+	ld hl, wd730
+	res 6, [hl]
 	ret
 
 BillsPCPrintBox:
@@ -241,7 +241,7 @@ BillsPCDeposit:
 	callfar PlayPikachuSoundClip
 	jr .asm_215cf
 .asm_215c9
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	call PlayCry
 .asm_215cf
 	callabd_ModifyPikachuHappiness PIKAHAPPY_DEPOSITED
@@ -304,7 +304,7 @@ BillsPCWithdraw:
 	callfar PlayPikachuSoundClip
 	jr .asm_21666
 .asm_21660
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	call PlayCry
 .asm_21666
 	xor a ; BOX_TO_PARTY
@@ -341,7 +341,7 @@ BillsPCRelease:
 	ld [wRemoveMonFromBox], a
 	call RemovePokemon
 	call WaitForSoundToFinish
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	call PlayCry
 	ld hl, MonWasReleasedText
 	call PrintText

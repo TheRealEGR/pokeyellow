@@ -34,7 +34,7 @@ LoadBGMapAttributes::
 	ldh [rHDMA4], a
 
 	ldh a, [rLCDC]
-	and 1 << rLCDC_ENABLE ; is LCD off?
+	and rLCDC_ENABLE_MASK ; is LCD off?
 	jr z, .lcdOff ; if off, transfer immediately
 ; wait for VBlank if LCD is on
 .waitForVBlankLoop1
@@ -68,7 +68,7 @@ LoadBGMapAttributes::
 	ldh [rHDMA4], a
 ; LCD check again
 	ldh a, [rLCDC]
-	and 1 << rLCDC_ENABLE ; is LCD off?
+	and rLCDC_ENABLE_MASK ; is LCD off?
 	jr z, .lcdOff2 ; if off, transfer immediately
 ; wait for VBlank if LCD is on
 .waitForVBlankLoop2

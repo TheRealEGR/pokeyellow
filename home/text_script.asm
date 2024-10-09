@@ -3,15 +3,14 @@ UnknownText_2812:: ; unreferenced
 	text_end
 
 ; this function is used to display sign messages, sprite dialog, etc.
-; INPUT: [hSpriteIndex] = sprite ID or [hTextID] = text ID
+; INPUT: [hSpriteIndexOrTextID] = sprite ID or text ID
 DisplayTextID::
-	assert hSpriteIndex == hTextID ; these are at the same memory location
 	ldh a, [hLoadedROMBank]
 	push af
 	farcall DisplayTextIDInit ; initialization
 	ld hl, wTextPredefFlag
-	bit BIT_TEXT_PREDEF, [hl]
-	res BIT_TEXT_PREDEF, [hl]
+	bit 0, [hl]
+	res 0, [hl]
 	jr nz, .skipSwitchToMapBank
 	ld a, [wCurMap]
 	call SwitchToMapRomBank
@@ -23,7 +22,7 @@ DisplayTextID::
 	ld h, [hl]
 	ld l, a ; hl = map text pointer
 	ld d, $00
-	ldh a, [hTextID]
+	ldh a, [hSpriteIndexOrTextID] ; text ID
 	ld [wSpriteIndex], a
 
 	dict TEXT_START_MENU,       DisplayStartMenu
@@ -35,7 +34,7 @@ DisplayTextID::
 
 	ld a, [wNumSprites]
 	ld e, a
-	ldh a, [hSpriteIndex] ; sprite ID
+	ldh a, [hSpriteIndexOrTextID] ; sprite ID
 	cp e
 	jr z, .spriteHandling
 	jr nc, .skipSpriteHandling
@@ -43,7 +42,7 @@ DisplayTextID::
 ; get the text ID of the sprite
 	push hl
 	ld hl, wMapSpriteData ; NPC text entries
-	ldh a, [hSpriteIndex]
+	ldh a, [hSpriteIndexOrTextID]
 	dec a
 	add a
 	ld e, a
@@ -124,9 +123,9 @@ CloseTextDisplay::
 	jr nz, .restoreSpriteFacingDirectionLoop
 	call InitMapSprites ; reload sprite tile pattern data (since it was partially overwritten by text tile patterns)
 	ld hl, wFontLoaded
-	res BIT_FONT_LOADED, [hl]
-	ld a, [wStatusFlags6]
-	bit BIT_FLY_WARP, a
+	res 0, [hl]
+	ld a, [wd732]
+	bit 3, a ; used fly warp
 	call z, LoadPlayerSpriteGraphics
 	call LoadCurrentMapView
 	pop af
@@ -192,9 +191,9 @@ PokemonFaintedText::
 DisplayPlayerBlackedOutText::
 	ld hl, PlayerBlackedOutText
 	call PrintText
-	ld a, [wStatusFlags6]
-	res BIT_ALWAYS_ON_BIKE, a
-	ld [wStatusFlags6], a
+	ld a, [wd732]
+	res 5, a ; reset forced to use bike bit
+	ld [wd732], a
 	CheckEvent EVENT_IN_SAFARI_ZONE
 	jr z, .didnotblackoutinsafari
 	xor a

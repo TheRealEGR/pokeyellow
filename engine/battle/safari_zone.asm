@@ -16,7 +16,7 @@ PrintSafariZoneBattleText:
 	jr nz, .done
 	push hl
 	ld a, [wEnemyMonSpecies]
-	ld [wCurSpecies], a
+	ld [wd0b5], a
 	call GetMonHeader
 	ld a, [wMonHCatchRate]
 	ld [wEnemyMonActualCatchRate], a

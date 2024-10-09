@@ -14,7 +14,7 @@ HiddenItems:
 	ld a, 1
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a
 	ld a, [wHiddenObjectFunctionArgument] ; item ID
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetItemName
 	tx_pre_jump FoundHiddenItemText
 

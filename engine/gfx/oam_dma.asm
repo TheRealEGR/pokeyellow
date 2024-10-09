@@ -2,7 +2,7 @@ WriteDMACodeToHRAM::
 ; Since no other memory is available during OAM DMA,
 ; DMARoutine is copied to HRAM and executed there.
 	ld c, LOW(hDMARoutine)
-	ld b, DMARoutine.End - DMARoutine
+	ld b, DMARoutineEnd - DMARoutine
 	ld hl, DMARoutine
 .copy
 	ld a, [hli]
@@ -25,4 +25,4 @@ hDMARoutine::
 	jr nz, .wait
 	ret
 ENDL
-.End:
+DMARoutineEnd:

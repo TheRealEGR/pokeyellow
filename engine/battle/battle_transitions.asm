@@ -11,7 +11,7 @@ BattleTransition:
 ; Determine which OAM block is being used by the enemy trainer sprite (if there
 ; is one).
 	ld hl, wSpritePlayerStateData1ImageIndex
-	ldh a, [hSpriteIndex] ; enemy trainer sprite index (0 if wild battle)
+	ldh a, [hSpriteIndexOrTextID] ; enemy trainer sprite index (0 if wild battle)
 	ld c, a
 	ld b, 0
 	ld de, $10
@@ -64,12 +64,6 @@ BattleTransition:
 	ld l, a
 	jp hl
 
-	const_def
-	const BIT_TRAINER_BATTLE_TRANSITION  ; 0
-	const BIT_STRONGER_BATTLE_TRANSITION ; 1
-	const BIT_DUNGEON_BATTLE_TRANSITION  ; 2
-DEF NUM_BATTLE_TRANSITION_BITS EQU const_value
-
 ; the three GetBattleTransitionID functions set the first
 ; three bits of c, which determines what transition animation
 ; to play at the beginning of a battle
@@ -77,7 +71,6 @@ DEF NUM_BATTLE_TRANSITION_BITS EQU const_value
 ; bit 1: set if enemy is at least 3 levels higher than player
 ; bit 2: set if dungeon map
 BattleTransitions:
-	table_width 2, BattleTransitions
 	dw BattleTransition_DoubleCircle      ; %000
 	dw BattleTransition_Spiral            ; %001
 	dw BattleTransition_Circle            ; %010
@@ -86,16 +79,15 @@ BattleTransitions:
 	dw BattleTransition_Shrink            ; %101
 	dw BattleTransition_VerticalStripes   ; %110
 	dw BattleTransition_Split             ; %111
-	assert_table_length 1 << NUM_BATTLE_TRANSITION_BITS
 
 GetBattleTransitionID_WildOrTrainer:
 	ld a, [wCurOpponent]
 	cp OPP_ID_OFFSET
 	jr nc, .trainer
-	res BIT_TRAINER_BATTLE_TRANSITION, c
+	res 0, c
 	ret
 .trainer
-	set BIT_TRAINER_BATTLE_TRANSITION, c
+	set 0, c
 	ret
 
 GetBattleTransitionID_CompareLevels:
@@ -113,15 +105,15 @@ GetBattleTransitionID_CompareLevels:
 	ld a, [hl]
 	add $3
 	ld e, a
-	ld a, [wCurEnemyLevel]
+	ld a, [wCurEnemyLVL]
 	sub e
 	jr nc, .highLevelEnemy
-	res BIT_STRONGER_BATTLE_TRANSITION, c
+	res 1, c
 	ld a, 1
 	ld [wBattleTransitionSpiralDirection], a
 	ret
 .highLevelEnemy
-	set BIT_STRONGER_BATTLE_TRANSITION, c
+	set 1, c
 	xor a
 	ld [wBattleTransitionSpiralDirection], a
 	ret
@@ -137,7 +129,7 @@ GetBattleTransitionID_IsDungeonMap:
 	cp e
 	jr nz, .loop1
 .match
-	set BIT_DUNGEON_BATTLE_TRANSITION, c
+	set 2, c
 	ret
 .noMatch1
 	ld hl, DungeonMaps2
@@ -153,7 +145,7 @@ GetBattleTransitionID_IsDungeonMap:
 	cp d
 	jr nc, .match
 .noMatch2
-	res BIT_DUNGEON_BATTLE_TRANSITION, c
+	res 2, c
 	ret
 
 INCLUDE "data/maps/dungeon_maps.asm"

@@ -1,7 +1,7 @@
-; tests if mon [wCurPartySpecies] can learn move [wMoveNum]
+; tests if mon [wcf91] can learn move [wMoveNum]
 CanLearnTM:
-	ld a, [wCurPartySpecies]
-	ld [wCurSpecies], a
+	ld a, [wcf91]
+	ld [wd0b5], a
 	call GetMonHeader
 	ld hl, wMonHLearnset
 	push hl
@@ -26,17 +26,17 @@ CanLearnTM:
 	ld c, 0
 	ret
 
-; converts TM/HM number in [wTempTMHM] into move number
+; converts TM/HM number in wd11e into move number
 ; HMs start at 51
 TMToMove:
-	ld a, [wTempTMHM]
+	ld a, [wd11e]
 	dec a
 	ld hl, TechnicalMachines
 	ld b, $0
 	ld c, a
 	add hl, bc
 	ld a, [hl]
-	ld [wTempTMHM], a
+	ld [wd11e], a
 	ret
 
 INCLUDE "data/moves/tmhm_moves.asm"

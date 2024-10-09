@@ -56,8 +56,8 @@ StartSimulatingJoypadStates::
 	xor a
 	ld [wOverrideSimulatedJoypadStatesMask], a
 	ld [wSpritePlayerStateData2MovementByte1], a
-	ld hl, wStatusFlags5
-	set BIT_SCRIPTED_MOVEMENT_STATE, [hl]
+	ld hl, wd730
+	set 7, [hl]
 	ret
 
 IsItemInBag::
@@ -71,11 +71,11 @@ IsItemInBag::
 	ret
 
 IsSurfingPikachuInParty::
-; set bit 6 of wd471 if true
+; set bit 6 of wd472 if true
 ; also calls Func_3467, which is a bankswitch to IsStarterPikachuInOurParty
-	ld a, [wd471]
+	ld a, [wd472]
 	and $3f
-	ld [wd471], a
+	ld [wd472], a
 	ld hl, wPartyMon1
 	ld c, PARTY_LENGTH
 	ld b, SURF
@@ -99,9 +99,9 @@ IsSurfingPikachuInParty::
 	cp b
 	jr nz, .noSurf
 .hasSurf
-	ld a, [wd471]
+	ld a, [wd472]
 	set 6, a
-	ld [wd471], a
+	ld [wd472], a
 .noSurf
 	pop hl
 .notPikachu
@@ -119,13 +119,13 @@ Func_3467::
 	pop bc
 	pop hl
 	ret nc
-	ld a, [wd471]
+	ld a, [wd472]
 	set 7, a
-	ld [wd471], a
+	ld [wd472], a
 	ret
 
 DisplayPokedex::
-	ld [wPokedexNum], a
+	ld [wd11e], a
 	farjp _DisplayPokedex
 
 SetSpriteFacingDirectionAndDelay::
@@ -301,7 +301,7 @@ SetSpriteMovementBytesToFF::
 
 ; returns the sprite movement byte 1 pointer for sprite [hSpriteIndex] in hl
 GetSpriteMovementByte1Pointer::
-	ld h, HIGH(wSpriteStateData2)
+	ld h, $C2
 	ldh a, [hSpriteIndex]
 	swap a
 	add 6

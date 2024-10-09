@@ -85,14 +85,14 @@ SSAnne2FSetFacingDirectionScript:
 	jp SetSpriteFacingDirectionAndDelay
 
 SSAnne2FRivalStartBattleScript:
-	ld a, [wStatusFlags5]
-	bit BIT_SCRIPTED_NPC_MOVEMENT, a
+	ld a, [wd730]
+	bit 0, a
 	ret nz
 	call SSAnne2FSetFacingDirectionScript
 	xor a
 	ld [wJoyIgnore], a
 	ld a, TEXT_SSANNE2F_RIVAL
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	call Delay3
 	ld a, OPP_RIVAL2
@@ -112,7 +112,7 @@ SSAnne2FRivalAfterBattleScript:
 	ld a, D_RIGHT | D_LEFT | D_UP | D_DOWN
 	ld [wJoyIgnore], a
 	ld a, TEXT_SSANNE2F_RIVAL_CUT_MASTER
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	ld a, SSANNE2F_RIVAL
 	ldh [hSpriteIndex], a
@@ -145,8 +145,8 @@ SSAnne2FRivalAfterBattleScript:
 	db -1 ; end
 
 SSAnne2FRivalExitScript:
-	ld a, [wStatusFlags5]
-	bit BIT_SCRIPTED_NPC_MOVEMENT, a
+	ld a, [wd730]
+	bit 0, a
 	ret nz
 	xor a
 	ld [wJoyIgnore], a
@@ -172,9 +172,9 @@ SSAnne2FRivalText:
 	text_asm
 	ld hl, .Text
 	call PrintText
-	ld hl, wStatusFlags3
-	set BIT_TALKED_TO_TRAINER, [hl]
-	set BIT_PRINT_END_BATTLE_TEXT, [hl]
+	ld hl, wd72d
+	set 6, [hl]
+	set 7, [hl]
 	ld hl, SSAnne2FRivalDefeatedText
 	ld de, SSAnne2FRivalVictoryText
 	call SaveEndBattleTextPointers

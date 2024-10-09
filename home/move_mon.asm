@@ -172,7 +172,7 @@ CalcStat::
 	ldh [hMultiplicand+1], a
 	xor a
 	ldh [hMultiplicand], a
-	ld a, [wCurEnemyLevel]
+	ld a, [wCurEnemyLVL]
 	ldh [hMultiplier], a
 	call Multiply            ; ((Base + IV) * 2 + ceil(Sqrt(stat exp)) / 4) * Level
 	ldh a, [hMultiplicand]
@@ -190,7 +190,7 @@ CalcStat::
 	cp $1
 	ld a, 5 ; + 5 for non-HP stat
 	jr nz, .notHPStat
-	ld a, [wCurEnemyLevel]
+	ld a, [wCurEnemyLVL]
 	ld b, a
 	ldh a, [hMultiplicand+2]
 	add b

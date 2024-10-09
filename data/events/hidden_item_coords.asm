@@ -3,7 +3,6 @@ MACRO hidden_item
 ENDM
 
 HiddenItemCoords:
-	table_width 3, HiddenItemCoords
 	; map id, x, y
 	hidden_item SILPH_CO_5F,                   12,   3
 	hidden_item SILPH_CO_9F,                    2,  15
@@ -60,5 +59,4 @@ HiddenItemCoords:
 	hidden_item CELADON_CITY,                  48,  15
 	hidden_item SAFARI_ZONE_GATE,              10,   1 ; inaccessible
 	hidden_item POKEMON_MANSION_1F,             8,  16
-	assert_max_table_length MAX_HIDDEN_ITEMS
 	db -1 ; end

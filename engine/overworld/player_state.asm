@@ -1,4 +1,4 @@
-; only used for setting BIT_STANDING_ON_WARP of wMovementFlags upon entering a new map
+; only used for setting bit 2 of wd736 upon entering a new map
 IsPlayerStandingOnWarp::
 	ld a, [wNumberOfWarps]
 	and a
@@ -18,8 +18,8 @@ IsPlayerStandingOnWarp::
 	ld [wDestinationWarpID], a
 	ld a, [hl] ; target map
 	ldh [hWarpDestinationMap], a
-	ld hl, wMovementFlags
-	set BIT_STANDING_ON_WARP, [hl]
+	ld hl, wd736
+	set 2, [hl] ; standing on warp flag
 	ret
 .nextWarp1
 	inc hl
@@ -32,8 +32,8 @@ IsPlayerStandingOnWarp::
 	ret
 
 CheckForceBikeOrSurf::
-	ld hl, wStatusFlags6
-	bit BIT_ALWAYS_ON_BIKE, [hl]
+	ld hl, wd732
+	bit 5, [hl]
 	ret nz
 	ld hl, ForcedBikeOrSurfMaps
 	ld a, [wYCoord]
@@ -45,14 +45,14 @@ CheckForceBikeOrSurf::
 .loop
 	ld a, [hli]
 	cp $ff
-	ret z ; if we reach FF then it's not part of the list
-	cp d ; compare to current map
+	ret z ;if we reach FF then it's not part of the list
+	cp d ;compare to current map
 	jr nz, .incorrectMap
 	ld a, [hli]
-	cp b ; compare y-coord
+	cp b ;compare y-coord
 	jr nz, .incorrectY
 	ld a, [hli]
-	cp c ; compare x-coord
+	cp c ;compare x-coord
 	jr nz, .loop ; incorrect x-coord, check next item
 	ld a, [wCurMap]
 	cp SEAFOAM_ISLANDS_B3F
@@ -64,8 +64,9 @@ CheckForceBikeOrSurf::
 	ld a, SCRIPT_SEAFOAMISLANDSB4F_MOVE_OBJECT
 	ld [wSeafoamIslandsB4FCurScript], a
 	jr z, .forceSurfing
-	ld hl, wStatusFlags6
-	set BIT_ALWAYS_ON_BIKE, [hl]
+	;force bike riding
+	ld hl, wd732
+	set 5, [hl]
 	ld a, $1
 	ld [wWalkBikeSurfState], a
 	ld [wWalkBikeSurfStateCopy], a
@@ -208,8 +209,8 @@ IsPlayerStandingOnDoorTileOrWarpTile::
 	lda_coord 8, 9
 	call IsInArray
 	jr nc, .done
-	ld hl, wMovementFlags
-	res BIT_STANDING_ON_WARP, [hl]
+	ld hl, wd736
+	res 2, [hl]
 .done
 	pop bc
 	pop de
@@ -295,13 +296,6 @@ _GetTileAndCoordsInFrontOfPlayer:
 	ld [wTileInFrontOfPlayer], a
 	ret
 
-; hPlayerFacing
-	const_def
-	const BIT_FACING_DOWN  ; 0
-	const BIT_FACING_UP    ; 1
-	const BIT_FACING_LEFT  ; 2
-	const BIT_FACING_RIGHT ; 3
-
 GetTileTwoStepsInFrontOfPlayer:
 	xor a
 	ldh [hPlayerFacing], a
@@ -314,7 +308,7 @@ GetTileTwoStepsInFrontOfPlayer:
 	jr nz, .notFacingDown
 ; facing down
 	ld hl, hPlayerFacing
-	set BIT_FACING_DOWN, [hl]
+	set 0, [hl]
 	lda_coord 8, 13
 	inc d
 	jr .storeTile
@@ -323,7 +317,7 @@ GetTileTwoStepsInFrontOfPlayer:
 	jr nz, .notFacingUp
 ; facing up
 	ld hl, hPlayerFacing
-	set BIT_FACING_UP, [hl]
+	set 1, [hl]
 	lda_coord 8, 5
 	dec d
 	jr .storeTile
@@ -332,7 +326,7 @@ GetTileTwoStepsInFrontOfPlayer:
 	jr nz, .notFacingLeft
 ; facing left
 	ld hl, hPlayerFacing
-	set BIT_FACING_LEFT, [hl]
+	set 2, [hl]
 	lda_coord 4, 9
 	dec e
 	jr .storeTile
@@ -341,7 +335,7 @@ GetTileTwoStepsInFrontOfPlayer:
 	jr nz, .storeTile
 ; facing right
 	ld hl, hPlayerFacing
-	set BIT_FACING_RIGHT, [hl]
+	set 3, [hl]
 	lda_coord 12, 9
 	inc e
 .storeTile
@@ -385,7 +379,7 @@ CheckForBoulderCollisionWithSprites:
 	ld de, $f
 	ld hl, wSprite01StateData2MapY
 	ldh a, [hPlayerFacing]
-	and (1 << BIT_FACING_UP) | (1 << BIT_FACING_DOWN)
+	and $3 ; facing up or down?
 	jr z, .pushingHorizontallyLoop
 .pushingVerticallyLoop
 	inc hl
@@ -396,7 +390,6 @@ CheckForBoulderCollisionWithSprites:
 	ld a, [hli]
 	ld b, a
 	ldh a, [hPlayerFacing]
-	assert BIT_FACING_DOWN == 0
 	rrca
 	jr c, .pushingDown
 ; pushing up
@@ -422,7 +415,7 @@ CheckForBoulderCollisionWithSprites:
 	jr nz, .nextSprite2
 	ld b, [hl]
 	ldh a, [hPlayerFacing]
-	bit BIT_FACING_LEFT, a
+	bit 2, a
 	jr nz, .pushingLeft
 ; pushing right
 	ldh a, [hPlayerXCoord]

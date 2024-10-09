@@ -65,7 +65,7 @@ DisplayCreditsMon:
 	xor a
 	ldh [hAutoBGTransferEnabled], a
 	ld hl, rLCDC
-	set rLCDC_BG_TILEMAP, [hl]
+	set 3, [hl]
 	call SaveScreenTilesToBuffer2
 	call FillMiddleOfScreenWithWhite
 	call GetNextCreditsMon
@@ -80,7 +80,7 @@ DisplayCreditsMon:
 	ldh [rBGP], a
 	call UpdateGBCPal_BGP
 	ld hl, rLCDC
-	res rLCDC_BG_TILEMAP, [hl]
+	res 3, [hl]
 	ld a, 1
 	ldh [hAutoBGTransferEnabled], a
 	ld b, 0
@@ -117,8 +117,8 @@ GetNextCreditsMon:
 	ld hl, CreditsMons
 	add hl, bc
 	ld a, [hl]
-	ld [wCurPartySpecies], a
-	ld [wCurSpecies], a
+	ld [wcf91], a
+	ld [wd0b5], a
 	hlcoord 8, 6
 	call GetMonHeader
 	call LoadFrontSpriteByMonIndex

@@ -22,9 +22,9 @@ Func_f531b::
 	call TextBoxBorder
 	call UpdateSprites
 	xor a
-	ld [wUnusedLinkMenuByte], a
-	ld [wCableClubDestinationMap], a
-	ld [wNamedObjectIndex], a
+	ld [wUnusedCD37], a
+	ld [wd72d], a
+	ld [wd11e], a
 	ld hl, wTopMenuItemY
 	ld a, $2
 	ld [hli], a
@@ -90,7 +90,7 @@ Func_f531b::
 	jr z, .asm_f53df
 .asm_f53d1
 	ld a, $1
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	ld a, b
 	ld [wLinkMenuSelectionSendBuffer], a
 	and $3
@@ -310,21 +310,21 @@ PetitCup::
 	jp z, DuplicateSpecies
 	dec hl
 	ld a, [hl]
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	push hl
 	callfar Func_3b10f
 	pop hl
 	jp c, asm_f56ad
 	inc hl
 	ld a, [hl]
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	push hl
 	callfar Func_3b10f
 	pop hl
 	jp c, asm_f56ad
 	inc hl
 	ld a, [hl]
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	push hl
 	callfar Func_3b10f
 	pop hl
@@ -343,19 +343,19 @@ PetitCup::
 	ld hl, PokedexEntryPointers
 	add hl, bc
 	add hl, bc
-	ld de, wNameBuffer
+	ld de, wcd6d
 	ld bc, $2
 	ld a, BANK(PokedexEntryPointers)
 	call FarCopyData
-	ld hl, wNameBuffer
+	ld hl, wcd6d
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld de, wNameBuffer
+	ld de, wcd6d
 	ld bc, $14
 	ld a, BANK(PokedexEntryPointers)
 	call FarCopyData
-	ld hl, wNameBuffer
+	ld hl, wcd6d
 .loop2
 	ld a, [hli]
 	cp "@"
@@ -483,7 +483,7 @@ asm_f5689::
 	pop af
 	pop bc
 	pop hl
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	ld hl, ColosseumHeightText
 	call PrintText
@@ -494,7 +494,7 @@ asm_f569b::
 	pop af
 	pop bc
 	pop hl
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	ld hl, ColosseumWeightText
 	call PrintText
@@ -503,7 +503,7 @@ asm_f569b::
 
 asm_f56ad::
 	ld a, [hl]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	ld hl, ColosseumEvolvedText
 	call PrintText
@@ -635,8 +635,8 @@ ColosseumIneligibleText::
 LinkMenu:
 	xor a
 	ld [wLetterPrintingDelayFlags], a
-	ld hl, wStatusFlags4
-	set BIT_LINK_CONNECTED, [hl]
+	ld hl, wd72e
+	set 6, [hl]
 	ld hl, TextTerminator_f5a16
 	call PrintText
 	call SaveScreenTilesToBuffer1
@@ -650,26 +650,20 @@ LinkMenu:
 	ld de, TradeCenterText
 	call PlaceString
 	xor a
-	ld [wUnusedLinkMenuByte], a
-	ld [wCableClubDestinationMap], a
-	ld [wNamedObjectIndex], a
+	ld [wUnusedCD37], a
+	ld [wd72d], a
+	ld [wd11e], a
 	ld hl, wTopMenuItemY
-	ld a, 5
+	ld a, $5
 	ld [hli], a
-	assert wTopMenuItemY + 1 == wTopMenuItemX
-	ld a, 6
+	ld a, $6
 	ld [hli], a
-	assert wTopMenuItemX + 1 == wCurrentMenuItem
 	xor a
 	ld [hli], a
 	inc hl
-	assert wCurrentMenuItem + 2 == wMaxMenuItem
-	ld a, 3
+	ld a, $3
 	ld [hli], a
-	assert wMaxMenuItem + 1 == wMenuWatchedKeys
-	assert 2 == B_BUTTON
 	ld [hli], a
-	assert wMenuWatchedKeys + 1 == wLastMenuItem
 	xor a
 	ld [hl], a
 .waitForInputLoop
@@ -722,7 +716,7 @@ LinkMenu:
 	jr z, .doneChoosingMenuSelection
 .useEnemyMenuSelection
 	ld a, $1
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	ld a, b
 	ld [wLinkMenuSelectionSendBuffer], a
 	and $3
@@ -775,12 +769,12 @@ LinkMenu:
 	jr nz, .next
 	ld a, TRADE_CENTER
 .next
-	ld [wCableClubDestinationMap], a
+	ld [wd72d], a
 	ld hl, ColosseumPleaseWaitText
 	call PrintText
 	ld c, 50
 	call DelayFrames
-	ld hl, wStatusFlags6
+	ld hl, wd732
 	res BIT_DEBUG_MODE, [hl]
 	ld a, [wDefaultMap]
 	ld [wDestinationMap], a
@@ -802,13 +796,13 @@ LinkMenu:
 	ld hl, ColosseumCanceledText
 	vc_hook Wireless_net_stop
 	call PrintText
-	ld hl, wStatusFlags4
-	res BIT_LINK_CONNECTED, [hl]
+	ld hl, wd72e
+	res 6, [hl]
 	vc_hook Wireless_net_end
 	ret
 
 .asm_f5963
-	ld a, [wNamedObjectIndex]
+	ld a, [wd11e]
 	and a
 	jr nz, .asm_f5974
 	ld b, " "
@@ -853,7 +847,7 @@ LinkMenu:
 	xor a
 	ld [wUnknownSerialCounter], a
 	ld [wUnknownSerialCounter+1], a
-	ld a, [wNamedObjectIndex]
+	ld a, [wd11e]
 	and a
 	jr z, .asm_f59cd
 	ld b, " "

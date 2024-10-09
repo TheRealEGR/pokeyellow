@@ -16,7 +16,7 @@ FindPathToPlayer:
 	and a
 	jr nz, .stillHasYProgress
 	ldh a, [hFindPathFlags]
-	set BIT_PATH_FOUND_Y, a
+	set 0, a ; current end of path matches the player's Y coordinate
 	ldh [hFindPathFlags], a
 .stillHasYProgress
 	ldh a, [hFindPathXProgress]
@@ -27,11 +27,11 @@ FindPathToPlayer:
 	and a
 	jr nz, .stillHasXProgress
 	ldh a, [hFindPathFlags]
-	set BIT_PATH_FOUND_X, a
+	set 1, a ; current end of path matches the player's X coordinate
 	ldh [hFindPathFlags], a
 .stillHasXProgress
 	ldh a, [hFindPathFlags]
-	cp (1 << BIT_PATH_FOUND_X) | (1 << BIT_PATH_FOUND_Y)
+	cp $3 ; has the end of the path reached the player's position?
 	jr z, .done
 ; Compare whether the X distance between the player and the current of the path
 ; is greater or if the Y distance is. Then, try to reduce whichever is greater.
@@ -40,7 +40,7 @@ FindPathToPlayer:
 	jr c, .yDistanceGreater
 ; x distance is greater
 	ldh a, [hNPCPlayerRelativePosFlags]
-	bit BIT_PLAYER_LOWER_X, a
+	bit 1, a
 	jr nz, .playerIsLeftOfNPC
 	ld d, NPC_MOVEMENT_RIGHT
 	jr .next1
@@ -53,7 +53,7 @@ FindPathToPlayer:
 	jr .storeDirection
 .yDistanceGreater
 	ldh a, [hNPCPlayerRelativePosFlags]
-	bit BIT_PLAYER_LOWER_Y, a
+	bit 0, a
 	jr nz, .playerIsAboveNPC
 	ld d, NPC_MOVEMENT_DOWN
 	jr .next2
@@ -97,15 +97,15 @@ CalcPositionOfPlayerRelativeToNPC:
 .NPCNorthOfPlayer
 	push hl
 	ld hl, hNPCPlayerRelativePosFlags
-	bit BIT_PLAYER_LOWER_Y, [hl]
-	set BIT_PLAYER_LOWER_Y, [hl]
+	bit 0, [hl]
+	set 0, [hl]
 	pop hl
 	jr .divideYDistance
 .NPCSouthOfOrAlignedWithPlayer
 	push hl
 	ld hl, hNPCPlayerRelativePosFlags
-	bit BIT_PLAYER_LOWER_Y, [hl]
-	res BIT_PLAYER_LOWER_Y, [hl]
+	bit 0, [hl]
+	res 0, [hl]
 	pop hl
 .divideYDistance
 	push hl
@@ -125,15 +125,15 @@ CalcPositionOfPlayerRelativeToNPC:
 .NPCWestOfPlayer
 	push hl
 	ld hl, hNPCPlayerRelativePosFlags
-	bit BIT_PLAYER_LOWER_X, [hl]
-	set BIT_PLAYER_LOWER_X, [hl]
+	bit 1, [hl]
+	set 1, [hl]
 	pop hl
 	jr .divideXDistance
 .NPCEastOfOrAlignedWithPlayer
 	push hl
 	ld hl, hNPCPlayerRelativePosFlags
-	bit BIT_PLAYER_LOWER_X, [hl]
-	res BIT_PLAYER_LOWER_X, [hl]
+	bit 1, [hl]
+	res 1, [hl]
 	pop hl
 .divideXDistance
 	ldh [hDividend2], a

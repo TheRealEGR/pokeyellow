@@ -1,6 +1,6 @@
 HandleLedges::
-	ld a, [wMovementFlags]
-	bit BIT_LEDGE_OR_FISHING, a
+	ld a, [wd736]
+	bit 6, a ; already jumping down ledge
 	ret nz
 	ld a, [wCurMapTileset]
 	and a ; OVERWORLD
@@ -41,8 +41,8 @@ HandleLedges::
 	ret z
 	ld a, A_BUTTON | B_BUTTON | SELECT | START | D_RIGHT | D_LEFT | D_UP | D_DOWN
 	ld [wJoyIgnore], a
-	ld hl, wMovementFlags
-	set BIT_LEDGE_OR_FISHING, [hl]
+	ld hl, wd736
+	set 6, [hl] ; jumping down ledge
 	call StartSimulatingJoypadStates
 	ld a, e
 	ld [wSimulatedJoypadStatesEnd], a

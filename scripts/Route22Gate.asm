@@ -27,7 +27,7 @@ Route22GateDefaultScript:
 	ld a, SPRITE_FACING_LEFT
 	ld [wSprite01StateData1FacingDirection], a
 	ld a, TEXT_ROUTE22GATE_GUARD
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	ret
 

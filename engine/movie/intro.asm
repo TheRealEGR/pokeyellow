@@ -116,8 +116,8 @@ PlayShootingStar:
 
 	call EnableLCD
 	ld hl, rLCDC
-	res rLCDC_WINDOW_ENABLE, [hl]
-	set rLCDC_BG_TILEMAP, [hl]
+	res 5, [hl]
+	set 3, [hl]
 	ld c, 64
 	call DelayFrames
 	farcall AnimateShootingStar

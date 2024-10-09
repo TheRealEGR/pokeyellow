@@ -1,7 +1,7 @@
 ResetStatusAndHalveMoneyOnBlackout::
 ; Reset player status on blackout.
 	xor a
-	ld [wd434], a
+	ld [wd435], a
 	xor a ; gamefreak copypasting functions (double xor a)
 	ld [wBattleResult], a
 	ld [wWalkBikeSurfState], a
@@ -10,7 +10,7 @@ ResetStatusAndHalveMoneyOnBlackout::
 	ld [wNPCMovementScriptFunctionNum], a
 	ldh [hJoyHeld], a
 	ld [wNPCMovementScriptPointerTableNum], a
-	ld [wMiscFlags], a
+	ld [wFlags_0xcd60], a
 
 	ldh [hMoney], a
 	ldh [hMoney + 1], a
@@ -39,10 +39,10 @@ ResetStatusAndHalveMoneyOnBlackout::
 	ld [wPlayerMoney + 2], a
 
 .lostmoney
-	ld hl, wStatusFlags6
-	set BIT_FLY_OR_DUNGEON_WARP, [hl]
-	res BIT_FLY_WARP, [hl]
-	set BIT_ESCAPE_WARP, [hl]
-	ld a, A_BUTTON | B_BUTTON | SELECT | START | D_RIGHT | D_LEFT | D_UP | D_DOWN
+	ld hl, wd732
+	set 2, [hl]
+	res 3, [hl]
+	set 6, [hl]
+	ld a, %11111111
 	ld [wJoyIgnore], a
 	predef_jump HealParty

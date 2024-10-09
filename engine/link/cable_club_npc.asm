@@ -113,8 +113,8 @@ CableClubNPC::
 	ld hl, wUnknownSerialCounter
 	ld [hli], a
 	ld [hl], a
-	ld hl, wStatusFlags4
-	res BIT_LINK_CONNECTED, [hl]
+	ld hl, wd72e
+	res 6, [hl]
 	xor a
 	ld [wMenuJoypadPollCount], a
 	ret

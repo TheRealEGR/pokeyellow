@@ -8,16 +8,7 @@ UncompressMonSprite::
 	ld [wSpriteInputPtr], a    ; fetch sprite input pointer
 	ld a, [hl]
 	ld [wSpriteInputPtr+1], a
-; define (by index number) the bank that a pokemon's image is in
-; index = MEW:             bank $1
-; index = FOSSIL_KABUTOPS: bank $B
-;       index < $1F:       bank $9 ("Pics 1")
-; $1F ≤ index < $4A:       bank $A ("Pics 2")
-; $4A ≤ index < $74:       bank $B ("Pics 3")
-; $74 ≤ index < $99:       bank $C ("Pics 4")
-; $99 ≤ index:             bank $D ("Pics 5")
-	ld a, [wCurPartySpecies]
-	ld b, a
+	ld a, [wcf91]
 	cp FOSSIL_KABUTOPS
 	jr z, .ghostOrFossil
 	cp FOSSIL_AERODACTYL
@@ -80,7 +71,7 @@ LoadUncompressedSpriteData::
 	add a     ; 8*(7*((8-w)/2) + 7-h) ; combined overall offset (in bytes)
 	ldh [hSpriteOffset], a
 	ld a, $0
-	call OpenSRAM
+	call SwitchSRAMBankAndLatchClockData
 	ld hl, sSpriteBuffer0
 	call ZeroSpriteBuffer   ; zero buffer 0
 	ld de, sSpriteBuffer1
@@ -91,7 +82,7 @@ LoadUncompressedSpriteData::
 	ld de, sSpriteBuffer2
 	ld hl, sSpriteBuffer1
 	call AlignSpriteDataCentered    ; copy and align buffer 2 to 1 (containing the LSB of the 2bpp sprite)
-	call CloseSRAM
+	call PrepareRTCDataAndDisableSRAM
 	pop de
 	jp InterlaceMergeSpriteBuffers
 
@@ -139,7 +130,7 @@ ZeroSpriteBuffer::
 ; de: output address
 InterlaceMergeSpriteBuffers::
 	ld a, $0
-	call OpenSRAM
+	call SwitchSRAMBankAndLatchClockData
 	push de
 	ld hl, sSpriteBuffer2 + (SPRITEBUFFERSIZE - 1) ; destination: end of buffer 2
 	ld de, sSpriteBuffer1 + (SPRITEBUFFERSIZE - 1) ; source 2: end of buffer 1
@@ -182,4 +173,4 @@ InterlaceMergeSpriteBuffers::
 	ldh a, [hLoadedROMBank]
 	ld b, a
 	call CopyVideoData
-	jp CloseSRAM
+	jp PrepareRTCDataAndDisableSRAM
