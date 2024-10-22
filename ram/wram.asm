@@ -631,10 +631,13 @@ wPlayerMonMinimized:: db
 
 	ds 13
 
-; number of hits by enemy in attacks like Double Slap, etc.
-wEnemyNumHits:: ; db
+UNION
 ; the amount of damage accumulated by the enemy while biding
 wEnemyBideAccumulatedDamage:: dw
+NEXTU
+; number of hits by enemy in attacks like Double Slap, etc.
+wEnemyNumHits:: db
+ENDU
 
 	ds 8
 wMiscBattleDataEnd::
@@ -1888,7 +1891,7 @@ wOptions:: db
 
 wObtainedBadges:: flag_array NUM_BADGES
 
-	ds 1
+wUnusedObtainedBadges:: db
 
 wLetterPrintingDelayFlags:: db
 
@@ -2351,7 +2354,7 @@ wSerialEnemyDataBlock:: ; ds $1a8
 
 	ds 9
 
-wEnemyPartyCount:: ds 1
+wEnemyPartyCount:: db
 wEnemyPartySpecies:: ds PARTY_LENGTH + 1
 
 wEnemyMons::
