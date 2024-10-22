@@ -1,6 +1,6 @@
 SECTION "Audio RAM", WRAM0
 
-wUnusedMusicByte:: db
+wUnusedC000:: db
 
 wSoundID:: db
 
@@ -536,8 +536,8 @@ NEXTU
 wSimulatedJoypadStatesEnd::
 
 NEXTU
-wUnusedFlag::
-wBoostExpByExpAll:: db
+wBoostExpByExpAll::
+wUnusedCC5B:: db
 
 	ds 59
 
@@ -728,17 +728,20 @@ ENDU
 	ds 1
 
 wNPCMovementDirections2Index::
-wUnusedLinkMenuByte::
+wUnusedCD37::
 ; number of items in wFilteredBagItems list
 wFilteredBagItemsCount:: db
 
 ; the next simulated joypad state is at wSimulatedJoypadStatesEnd plus this value minus 1
 ; 0 if the joypad state is not being simulated
 wSimulatedJoypadStatesIndex:: db
+
 ; written to but nothing ever reads it
-wUnusedSimulatedJoypadStatesMask:: db
+wUnusedCD39:: db
+
 ; written to but nothing ever reads it
-wUnusedOverrideSimulatedJoypadStatesIndex:: db
+wUnusedCD3A:: db
+
 ; mask indicating which real button presses can override simulated ones
 ; XXX is it ever not 0?
 wOverrideSimulatedJoypadStatesMask:: db
@@ -942,7 +945,7 @@ wBadgeOrFaceTiles:: ds NUM_BADGES + 1
 wTempObtainedBadgesBooleans:: ds NUM_BADGES
 
 NEXTU
-wUnusedCreditsByte:: db
+wUnusedCD3D:: db
 ; the number of credits mons that have been displayed so far
 wNumCreditsMonsDisplayed:: db
 
@@ -1013,7 +1016,12 @@ wLeftGBMonSpecies:: db
 ; in the trade animation, the mon that leaves the right gameboy
 wRightGBMonSpecies:: db
 
-wMiscFlags:: db
+; bit 0: is player engaged by trainer (to avoid being engaged by multiple trainers simultaneously)
+; bit 1: boulder dust animation (from using Strength) pending
+; bit 3: using generic PC
+; bit 5: don't play sound when A or B is pressed in menu
+; bit 6: tried pushing against boulder once (you need to push twice before it will move)
+wFlags_0xcd60:: db
 
 	ds 9
 
@@ -1039,29 +1047,16 @@ wDownscaledMonSize::
 wNumMovesMinusOne:: db
 
 UNION
-; storage buffer for various name strings
-wNameBuffer:: ds NAME_BUFFER_LENGTH
+wcd6d:: ds NAME_BUFFER_LENGTH ; buffer for various data
 
 NEXTU
-; data copied from Moves for one move
-wMoveData:: ds MOVE_LENGTH
-wPPUpCountAndMaxPP:: db
-
-NEXTU
-; amount of money made from one use of Pay Day
-wPayDayMoney:: ds 3
-
-NEXTU
-; evolution data for one mon
-wEvoDataBuffer:: ds 4 * 3 + 1 ; enough for Eevee's three 4-byte evolutions and 0 terminator
-
-NEXTU
-wBattleMenuCurrentPP:: db
-	ds 3
+	ds 4
+; temp variable used to print a move's current PP on the status screen
 wStatusScreenCurrentPP:: db
 	ds 6
 ; list of normal max PP (without PP up) values
 wNormalMaxPPList:: ds NUM_MOVES
+	ds 5
 ENDU
 
 UNION
@@ -1140,7 +1135,7 @@ wBoughtOrSoldItemInMart:: db
 ; $02 - draw
 wBattleResult:: db
 
-; bit 0: if set, prevents DisplayTextID from automatically drawing a text box
+; bit 0: if set, DisplayTextID automatically draws a text box
 wAutoTextBoxDrawingControl:: db
 
 ; used in some overworld scripts to vary scripted movement
@@ -1233,14 +1228,11 @@ wItemList:: ds 16
 wListPointer:: dw
 
 ; used to store pointers, but never read
-wUnusedNamePointer:: dw
+wUnusedCF8D:: dw
 
 wItemPrices:: dw
 
-wCurPartySpecies::
-wCurItem::
-wCurListMenuItem::
-	db
+wcf91:: db ; used with a lot of things (too much to list here)
 
 ; which pokemon you selected
 wWhichPokemon:: db
@@ -1415,15 +1407,38 @@ wMoveMissed:: db
 
 ; always 0
 wPlayerStatsToDouble:: db
+
 ; always 0
 wPlayerStatsToHalve:: db
 
+; bit 0 - bide
+; bit 1 - thrash / petal dance
+; bit 2 - attacking multiple times (e.g. double kick)
+; bit 3 - flinch
+; bit 4 - charging up for attack
+; bit 5 - using multi-turn move (e.g. wrap)
+; bit 6 - invulnerable to normal attack (using fly/dig)
+; bit 7 - confusion
 wPlayerBattleStatus1:: db
+
+; bit 0 - X Accuracy effect
+; bit 1 - protected by "mist"
+; bit 2 - focus energy effect
+; bit 4 - has a substitute
+; bit 5 - need to recharge
+; bit 6 - rage
+; bit 7 - leech seeded
 wPlayerBattleStatus2:: db
+
+; bit 0 - toxic
+; bit 1 - light screen
+; bit 2 - reflect
+; bit 3 - transformed
 wPlayerBattleStatus3:: db
 
 ; always 0
 wEnemyStatsToDouble:: db
+
 ; always 0
 wEnemyStatsToHalve:: db
 
@@ -1539,7 +1554,7 @@ wOptionsInitialized::
 wNewSlotMachineBallTile::
 ; how much to add to the X/Y coord
 wCoordAdjustmentAmount::
-wUnusedWaterDropletsByte::
+wUnusedD08A::
 	db
 
 wSlideMonDelay::
@@ -1581,7 +1596,7 @@ wPartyMenuAnimMonEnabled::
 ; non-zero when enabled. causes nest locations to blink on and off.
 ; the town selection cursor will blink regardless of what this value is
 wTownMapSpriteBlinkingEnabled::
-wUnusedMoveAnimByte:: db
+wUnusedD09B:: db
 
 ; current destination address in OAM for frame blocks (big endian)
 wFBDestAddr:: dw
@@ -1644,10 +1659,8 @@ wSpriteDecodeTable0Ptr:: dw
 ; pointer to differential decoding table (assuming initial value 1)
 wSpriteDecodeTable1Ptr:: dw
 
-; input for GetMonHeader
-wCurSpecies::
-; input for GetName
-wNameListIndex:: db
+wd0b5:: db ; used as a temp storage area for Pokemon Species, and other Pokemon/Battle related things
+
 wNameListType:: db
 
 wPredefBank:: db
@@ -1690,7 +1703,7 @@ wMoveNum:: db
 
 wMovesString:: ds 56
 
-wUnusedCurMapTilesetCopy:: db
+wUnusedD119:: db
 
 ; wWalkBikeSurfState is sometimes copied here, but it doesn't seem to be used for anything
 wWalkBikeSurfStateCopy:: db
@@ -1708,22 +1721,19 @@ wCapturedMonSpecies:: db
 ; which will be the first mon sent out.
 wFirstMonsNotOutYet:: db
 
-wNamedObjectIndex::
-wTempByteValue::
-wNumSetBits::
-wTypeEffectiveness::
-wMoveType::
-wPokedexNum::
-wTempTMHM::
-wUsingPPUp::
-wMaxPP::
-wMoveGrammar::
-; 0 for player, non-zero for enemy
-wCalculateWhoseStats::
 wPokeBallCaptureCalcTemp::
 ; lower nybble: number of shakes
 ; upper nybble: number of animations to play
 wPokeBallAnimData::
+wUsingPPUp::
+wMaxPP::
+; 0 for player, non-zero for enemy
+wCalculateWhoseStats::
+wTypeEffectiveness::
+wMoveType::
+wNumSetBits::
+; used as a Pokemon and Item storage value. Also used as an output value for CountSetBits
+wd11e::
 	db
 
 ; When this value is non-zero, the player isn't allowed to exit the party menu
@@ -1743,12 +1753,9 @@ wIsKeyItem:: db
 
 wTextBoxID:: db
 
-; bit 5: set when maps first load; can be reset to re-run a script
-; bit 6: set when maps first load; can be reset to re-run a script (used less often than bit 5)
-; bit 7: set when using an elevator map's menu; triggers the shaking animation
-wCurrentMapScriptFlags:: db
+wCurrentMapScriptFlags:: db ; not exactly sure what this is used for, but it seems to be used as a multipurpose temp flag value
 
-wCurEnemyLevel:: db
+wCurEnemyLVL:: db
 
 ; pointer to list of items terminated by $FF
 wItemListPointer:: dw
@@ -1794,7 +1801,7 @@ wSavedSpriteMapX:: db
 wWhichPrize:: db
 
 ; counts downward each frame
-; when it hits 0, BIT_DISABLE_JOYPAD of wStatusFlags5 is reset
+; when it hits 0, bit 5 (ignore input bit) of wd730 is reset
 wIgnoreInputCounter:: db
 
 ; counts down once every step
@@ -1832,6 +1839,8 @@ wSerialPlayerDataBlock:: ; ds $1a8
 wPseudoItemID:: db
 
 wUnusedAlreadyOwnedFlag:: db
+
+	ds 2
 
 wEvoStoneItemID:: db
 
@@ -1887,12 +1896,31 @@ wPlayerMoney:: ds 3 ; BCD
 
 wRivalName:: ds NAME_LENGTH
 
+; bit 7 = battle animation
+; 0: On
+; 1: Off
+; bit 6 = battle style
+; 0: Shift
+; 1: Set
+; bits 5-4 = sound
+;	00: Mono
+;	01: Earphone1
+;	10: Earphone2
+;	11: Earphone3
+; bits 2-0 = text speed (number of frames to delay after printing a letter)
+; 1: Fast
+; 3: Medium
+; 5: Slow
 wOptions:: db
 
 wObtainedBadges:: flag_array NUM_BADGES
 
 wUnusedObtainedBadges:: db
 
+; bit 0: If 0, limit the delay to 1 frame. Note that this has no effect if
+;        the delay has been disabled entirely through bit 1 of this variable
+;        or bit 6 of wd730.
+; bit 1: If 0, no delay.
 wLetterPrintingDelayFlags:: db
 
 wPlayerID:: dw
@@ -1918,11 +1946,12 @@ wYBlockCoord:: db
 wXBlockCoord:: db
 
 wLastMap:: db
-wUnusedLastMapWidth:: db
+
+wUnusedD366:: db
 
 wCurMapHeader::
 wCurMapTileset:: db
-wCurMapHeight:: db
+wCurMapHeight:: db 
 wCurMapWidth:: db
 wCurMapDataPtr:: dw
 wCurMapTextPtr:: dw
@@ -1956,11 +1985,11 @@ wDestinationWarpID:: db
 
 wPikachuOverworldStateFlags:: db
 wPikachuSpawnState:: db
-wd431:: db
 wd432:: db
 wd433:: db
 wd434:: db
 wd435:: db
+wd436:: db
 wPikachuFollowCommandBufferSize:: db
 wPikachuFollowCommandBuffer:: ds 16
 
@@ -2014,12 +2043,12 @@ ENDU
 
 wPikachuHappiness:: db
 wPikachuMood:: db
-wd471:: db
 wd472:: db
+wd473:: db
 	ds 1
-wd474:: db
+wd475:: db
 	ds 4
-wd479:: db
+wd47a:: db
 	ds 24
 wd492:: db
 	ds 1
@@ -2029,7 +2058,7 @@ wPrinterSettings:: db
 wUnknownSerialFlag_d499:: db
 wPrinterConnectionOpen:: db
 wPrinterOpcode:: db
-wd49b:: db
+wd49c:: db
 
 	ds 19
 
@@ -2103,9 +2132,9 @@ wCurrentBoxNum:: db
 ; number of HOF teams
 wNumHoFTeams:: db
 
-wUnusedMapVariable:: db
+wUnusedD5A3:: db
 
-wPlayerCoins:: dw ; BCD
+wPlayerCoins:: ds 2 ; BCD
 
 ; bit array of missable objects. set = removed
 wMissableObjectFlags:: flag_array $100
@@ -2242,9 +2271,9 @@ wGameProgressFlagsEnd::
 
 	ds 56
 
-wObtainedHiddenItemsFlags:: flag_array MAX_HIDDEN_ITEMS
+wObtainedHiddenItemsFlags:: flag_array 112
 
-wObtainedHiddenCoinsFlags:: flag_array MAX_HIDDEN_COINS
+wObtainedHiddenCoinsFlags:: flag_array 16
 
 ; $00 = walking
 ; $01 = biking
@@ -2287,8 +2316,7 @@ wLastBlackoutMap:: db
 ; destination map (for certain types of special warps, not ordinary walking)
 wDestinationMap:: db
 
-; initialized to $ff, but nothing ever reads it
-wUnusedPlayerDataByte:: db
+wUnusedD71B:: db
 
 ; used to store the tile in front of the boulder when trying to push a boulder
 ; also used to store the result of the collision check ($ff for a collision and $00 for no collision)
@@ -2300,26 +2328,92 @@ wDungeonWarpDestinationMap:: db
 ; which dungeon warp within the source map was used
 wWhichDungeonWarp:: db
 
-wUnusedCardKeyGateID:: db
+wUnusedD71F:: db
 
 	ds 8
 
-wStatusFlags1:: db
+; bit 0: using Strength outside of battle
+; bit 1: set by IsSurfingAllowed when surfing's allowed, but the caller resets it after checking the result
+; bit 3: received Old Rod
+; bit 4: received Good Rod
+; bit 5: received Super Rod
+; bit 6: gave one of the Saffron guards a drink
+; bit 7: set by ItemUseCardKey, which is leftover code from a previous implementation of the Card Key
+wd728:: db
+
 	ds 1
-wBeatGymFlags:: db ; redundant because it matches wObtainedBadges
+
+; redundant because it matches wObtainedBadges
+; used to determine whether to show name on statue and in two NPC text scripts
+wBeatGymFlags:: db
+
 	ds 1
-wStatusFlags2:: db
-wCableClubDestinationMap::
-wStatusFlags3:: db
-wStatusFlags4:: db
+
+; bit 0: if not set, the 3 minimum steps between random battles have passed
+; bit 1: prevent audio fade out
+wd72c:: db
+
+; This variable is used for temporary flags and as the destination map when
+; warping to the Trade Center or Colosseum.
+; bit 0: sprite facing directions have been initialised in the Trade Center
+; bit 3: do scripted warp (used to warp back to Lavender Town from the top of the pokemon tower)
+; bit 4: on a dungeon warp
+; bit 5: don't make NPCs face the player when spoken to
+; Bits 6 and 7 are set by scripts when starting major battles in the storyline,
+; but they do not appear to affect anything. Bit 6 is reset after all battles
+; and bit 7 is reset after trainer battles (but it's only set before trainer
+; battles anyway).
+wd72d:: db
+
+; bit 0: the player has received Lapras in the Silph Co. building
+; bit 1: set in various places, but doesn't appear to have an effect
+; bit 2: the player has healed pokemon at a pokemon center at least once
+; bit 3: the player has a received a pokemon from Prof. Oak
+; bit 4: disable battles
+; bit 5: set when a battle ends and when the player blacks out in the overworld due to poison
+; bit 6: using the link feature
+; bit 7: set if scripted NPC movement has been initialised
+wd72e:: db
+
 	ds 1
-wStatusFlags5:: db
+
+; bit 0: NPC sprite being moved by script
+; bit 5: ignore joypad input
+; bit 6: print text with no delay between each letter
+; bit 7: set if joypad states are being simulated in the overworld or an NPC's movement is being scripted
+wd730:: db
+
 	ds 1
-wStatusFlags6:: db
-wStatusFlags7:: db
-wElite4Flags:: db
+
+; bit 0: play time being counted
+; bit 1: debug mode (unused and incomplete in non-debug builds)
+; bit 2: the target warp is a fly warp (bit 3 set or blacked out) or a dungeon warp (bit 4 set)
+; bit 3: used warp pad, escape rope, dig, teleport, or fly, so the target warp is a "fly warp"
+; bit 4: jumped into hole (Pokemon Mansion, Seafoam Islands, Victory Road) or went down waterfall (Seafoam Islands), so the target warp is a "dungeon warp"
+; bit 5: currently being forced to ride bike (cycling road)
+; bit 6: map destination is [wLastBlackoutMap] (usually the last used pokemon center, but could be the player's house)
+wd732:: db
+
+; bit 0: running a test battle (unused in non-debug builds)
+; bit 1: prevent music from changing when entering new map
+; bit 2: skip the joypad check in CheckWarpsNoCollision (used for the forced warp down the waterfall in the Seafoam Islands)
+; bit 3: trainer wants to battle
+; bit 4: use variable [wCurMapScript] instead of the provided index for next frame's map script (used to start battle when talking to trainers)
+; bit 7: used fly out of battle
+wFlags_D733:: db
+
+; bit 1: set when you beat Lorelei and reset in Indigo Plateau lobby
+; the game uses this to tell when Elite 4 events need to be reset
+wBeatLorelei:: db
+
 	ds 1
-wMovementFlags:: db
+
+; bit 0: check if the player is standing on a door and make him walk down a step if so
+; bit 1: the player is currently stepping down from a door
+; bit 2: standing on a warp
+; bit 6: jumping down a ledge / fishing animation
+; bit 7: player sprite spinning due to spin tiles (Rocket hideout / Viridian Gym)
+wd736:: db
 
 wCompletedInGameTradeFlags:: dw
 
@@ -2384,7 +2478,8 @@ wTrainerHeaderPtr:: dw
 
 ; the trainer the player must face after getting a wrong answer in the Cinnabar
 ; gym quiz
-wOpponentAfterWrongAnswer:: db
+wOpponentAfterWrongAnswer::
+wUnusedDA38:: db
 
 ; index of current map script, mostly used as index for function pointer array
 ; mostly copied from map-specific map script pointer and written back later
@@ -2451,7 +2546,7 @@ wGBCPal:: ds PALETTE_SIZE
 wLastBGP:: db
 wLastOBP0:: db
 wLastOBP1:: db
-wdef4:: db
+wdef5:: db
 wBGPPalsBuffer:: ds NUM_ACTIVE_PALS * PALETTE_SIZE
 
 
@@ -2460,5 +2555,3 @@ SECTION "Stack", WRAM0
 ; the stack grows downward
 	ds $eb - 1
 wStack:: db
-
-ENDSECTION

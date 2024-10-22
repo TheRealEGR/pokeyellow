@@ -28,7 +28,7 @@ PrintCardKeyText:
 	xor a
 	ld [wPlayerMovingDirection], a
 	tx_pre_id CardKeySuccessText
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call PrintPredefTextID
 	call GetCoordsInFrontOfPlayer
 	srl d
@@ -50,12 +50,12 @@ PrintCardKeyText:
 	ld [wNewTileBlockID], a
 	predef ReplaceTileBlock
 	ld hl, wCurrentMapScriptFlags
-	set BIT_CUR_MAP_LOADED_1, [hl]
+	set 5, [hl]
 	ld a, SFX_GO_INSIDE
 	jp PlaySound
 .noCardKey
 	tx_pre_id CardKeyFailText
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	jp PrintPredefTextID
 
 INCLUDE "data/events/card_key_maps.asm"

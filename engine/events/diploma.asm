@@ -4,12 +4,12 @@ DisplayDiploma::
 	call ClearScreen
 	xor a
 	ld [wUpdateSpritesEnabled], a
-	ld hl, wStatusFlags5
-	set BIT_NO_TEXT_DELAY, [hl]
+	ld hl, wd730
+	set 6, [hl]
 	callfar _DisplayDiploma
 	call WaitForTextScrollButtonPress
-	ld hl, wStatusFlags5
-	res BIT_NO_TEXT_DELAY, [hl]
+	ld hl, wd730
+	res 6, [hl]
 	call GBPalWhiteOutWithDelay3
 	call ReloadTilesetTilePatterns
 	call RestoreScreenTilesAndReloadTilePatterns

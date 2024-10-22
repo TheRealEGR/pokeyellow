@@ -1,6 +1,6 @@
 AerodactylFossil:
 	ld a, FOSSIL_AERODACTYL
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	call DisplayMonFrontSpriteInBox
 	call EnableAutoTextBoxDrawing
 	tx_pre AerodactylFossilText
@@ -12,7 +12,7 @@ AerodactylFossilText::
 
 KabutopsFossil:
 	ld a, FOSSIL_KABUTOPS
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	call DisplayMonFrontSpriteInBox
 	call EnableAutoTextBoxDrawing
 	tx_pre KabutopsFossilText

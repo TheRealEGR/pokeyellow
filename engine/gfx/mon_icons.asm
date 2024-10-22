@@ -208,9 +208,9 @@ WriteMonPartySpriteOAMBySpecies:
 UnusedPartyMonSpriteFunction:
 ; This function is unused and doesn't appear to do anything useful. It looks
 ; like it may have been intended to load the tile patterns and OAM data for
-; the mon party sprite associated with the species in [wCurPartySpecies].
+; the mon party sprite associated with the species in [wcf91].
 ; However, its calculations are off and it loads garbage data.
-	ld a, [wCurPartySpecies]
+	ld a, [wcf91]
 	call GetPartyMonSpriteID
 	push af
 	ld hl, vSprites tile $00
@@ -270,9 +270,9 @@ WriteMonPartySpriteOAM:
 	jp CopyData
 
 GetPartyMonSpriteID:
-	ld [wPokedexNum], a
+	ld [wd11e], a
 	predef IndexToPokedex
-	ld a, [wPokedexNum]
+	ld a, [wd11e]
 	ld c, a
 	dec a
 	srl a
@@ -281,7 +281,7 @@ GetPartyMonSpriteID:
 	ld d, 0
 	add hl, de
 	ld a, [hl]
-	bit 0, c ; even or odd?
+	bit 0, c
 	jr nz, .skipSwap
 	swap a ; use lower nybble if pokedex num is even
 .skipSwap

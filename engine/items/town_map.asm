@@ -1,7 +1,5 @@
 DEF NOT_VISITED EQU $fe
 
-DEF BIRD_BASE_TILE EQU $04
-
 DisplayTownMap:
 	call LoadTownMap
 	ld hl, wUpdateSpritesEnabled
@@ -14,15 +12,15 @@ DisplayTownMap:
 	ld a, [wCurMap]
 	push af
 	ld b, $0
-	call DrawPlayerOrBirdSprite
+	call DrawPlayerOrBirdSprite ; player sprite
 	hlcoord 1, 0
-	ld de, wNameBuffer
+	ld de, wcd6d
 	call PlaceString
 	ld hl, wShadowOAM
 	ld de, wTileMapBackup
 	ld bc, $10
 	call CopyData
-	ld hl, vSprites tile BIRD_BASE_TILE
+	ld hl, vSprites tile $04
 	ld de, TownMapCursor
 	lb bc, BANK(TownMapCursor), (TownMapCursorEnd - TownMapCursor) / $8
 	call CopyVideoDataDouble
@@ -52,15 +50,15 @@ DisplayTownMap:
 	ld hl, wShadowOAMSprite04
 	call WriteTownMapSpriteOAM ; town map cursor sprite
 	pop hl
-	ld de, wNameBuffer
+	ld de, wcd6d
 .copyMapName
 	ld a, [hli]
 	ld [de], a
 	inc de
-	cp "@"
+	cp $50
 	jr nz, .copyMapName
 	hlcoord 1, 0
-	ld de, wNameBuffer
+	ld de, wcd6d
 	call PlaceString
 	ld hl, wShadowOAMSprite04
 	ld de, wTileMapBackup + 16
@@ -75,9 +73,9 @@ DisplayTownMap:
 	jr z, .inputLoop
 	ld a, SFX_TINK
 	call PlaySound
-	bit BIT_D_UP, b
+	bit 6, b
 	jr nz, .pressedUp
-	bit BIT_D_DOWN, b
+	bit 7, b
 	jr nz, .pressedDown
 	xor a
 	ld [wTownMapSpriteBlinkingEnabled], a
@@ -155,7 +153,7 @@ LoadTownMap_Fly::
 	ld de, BirdSprite
 	ld b, BANK(BirdSprite)
 	ld c, 12
-	ld hl, vSprites tile BIRD_BASE_TILE
+	ld hl, vSprites tile $04
 	call CopyVideoData
 	ld de, TownMapUpArrow
 	ld hl, vChars1 tile $6d
@@ -185,10 +183,10 @@ LoadTownMap_Fly::
 	call ClearScreenArea
 	pop hl
 	ld a, [hl]
-	ld b, BIRD_BASE_TILE
-	call DrawPlayerOrBirdSprite
+	ld b, $4
+	call DrawPlayerOrBirdSprite ; draw bird sprite
 	hlcoord 3, 0
-	ld de, wNameBuffer
+	ld de, wcd6d
 	call PlaceString
 	ld c, 15
 	call DelayFrames
@@ -206,13 +204,13 @@ LoadTownMap_Fly::
 	pop hl
 	and A_BUTTON | B_BUTTON | D_UP | D_DOWN
 	jr z, .inputLoop
-	bit BIT_A_BUTTON, b
+	bit 0, b
 	jr nz, .pressedA
 	ld a, SFX_TINK
 	call PlaySound
-	bit BIT_D_UP, b
+	bit 6, b
 	jr nz, .pressedUp
-	bit BIT_D_DOWN, b
+	bit 7, b
 	jr nz, .pressedDown
 	jr .pressedB
 .pressedA
@@ -220,11 +218,10 @@ LoadTownMap_Fly::
 	call PlaySound
 	ld a, [hl]
 	ld [wDestinationMap], a
-	ld hl, wStatusFlags6
-	set BIT_FLY_WARP, [hl]
-	assert wStatusFlags6 + 1 == wStatusFlags7
+	ld hl, wd732
+	set 3, [hl]
 	inc hl
-	set BIT_USED_FLY, [hl]
+	set 7, [hl]
 .pressedB
 	xor a
 	ld [wTownMapSpriteBlinkingEnabled], a
@@ -368,7 +365,7 @@ DrawPlayerOrBirdSprite:
 	call TownMapCoordsToOAMCoords
 	call WritePlayerOrBirdSpriteOAM
 	pop hl
-	ld de, wNameBuffer
+	ld de, wcd6d
 .loop
 	ld a, [hli]
 	ld [de], a

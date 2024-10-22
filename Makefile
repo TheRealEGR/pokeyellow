@@ -81,7 +81,7 @@ tools:
 	$(MAKE) -C tools/
 
 
-RGBASMFLAGS = -Q8 -P includes.asm -Weverything -Wnumeric-string=2 -Wtruncation=1
+RGBASMFLAGS = -hL -Q8 -P includes.asm -Weverything -Wnumeric-string=2 -Wtruncation=1
 # Create a sym/map for debug purposes if `make` run with `DEBUG=1`
 ifeq ($(DEBUG),1)
 RGBASMFLAGS += -E
@@ -169,9 +169,9 @@ gfx/surfing_pikachu/surfing_pikachu_3.2bpp: tools/gfx += --trim-whitespace
 		tools/gfx $(tools/gfx) -o $@ $@)
 
 %.1bpp: %.png
-	$(RGBGFX) $(rgbgfx) --depth 1 -o $@ $<
+	$(RGBGFX) $(rgbgfx) -d1 -o $@ $<
 	$(if $(tools/gfx),\
-		tools/gfx $(tools/gfx) --depth 1 -o $@ $@)
+		tools/gfx $(tools/gfx) -d1 -o $@ $@)
 
 %.pic: %.2bpp
 	tools/pkmncompress $< $@

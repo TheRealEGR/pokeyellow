@@ -2,7 +2,7 @@ VermilionCityPrintOfficerJennyText::
 	CheckEvent EVENT_GOT_SQUIRTLE_FROM_OFFICER_JENNY
 	jr nz, .asm_f1a69
 	ld a, [wBeatGymFlags]
-	bit BIT_THUNDERBADGE, a
+	bit 2, a ; THUNDERBADGE
 	jr nz, .asm_f1a24
 	ld hl, OfficerJennyText1
 	call PrintText
@@ -16,8 +16,8 @@ VermilionCityPrintOfficerJennyText::
 	and a
 	jr nz, .asm_f1a62
 	ld a, SQUIRTLE
-	ld [wNamedObjectIndex], a
-	ld [wCurPartySpecies], a
+	ld [wd11e], a
+	ld [wcf91], a
 	call GetMonName
 	ld a, $1
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a

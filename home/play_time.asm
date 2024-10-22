@@ -1,10 +1,10 @@
 TrackPlayTime::
 	call CountDownIgnoreInputBitReset
-	ld hl, wd479
+	ld hl, wd47a
 	bit 0, [hl]
 	jr nz, .maxIGT
-	ld a, [wStatusFlags6]
-	bit BIT_GAME_TIMER_COUNTING, a
+	ld a, [wd732]
+	bit 0, a
 	ret z
 	ld a, [wPlayTimeMaxed]
 	and a
@@ -35,7 +35,7 @@ TrackPlayTime::
 	ld [wPlayTimeHours], a
 	cp $ff
 	ret nz
-	ld hl, wd479
+	ld hl, wd47a
 	set 0, [hl]
 .maxIGT
 	ld a, 59
@@ -58,12 +58,12 @@ CountDownIgnoreInputBitReset:
 	ld [wIgnoreInputCounter], a
 	and a
 	ret nz
-	ld a, [wStatusFlags5]
-	res BIT_UNKNOWN_5_1, a
-	res BIT_UNKNOWN_5_2, a
-	bit BIT_DISABLE_JOYPAD, a
-	res BIT_DISABLE_JOYPAD, a
-	ld [wStatusFlags5], a
+	ld a, [wd730]
+	res 1, a
+	res 2, a
+	bit 5, a
+	res 5, a
+	ld [wd730], a
 	ret z
 	xor a
 	ldh [hJoyPressed], a

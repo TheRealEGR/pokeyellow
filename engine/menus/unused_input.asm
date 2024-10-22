@@ -42,7 +42,7 @@ HandleMenuInputPokemonSelectionDuplicate: ; unreferenced
 	ld [wCurrentMenuItem], a ; move selected menu item up one space
 	jr .checkOtherKeys
 .checkIfDownPressed
-	bit BIT_D_DOWN, a
+	bit 7, a
 	jr z, .checkOtherKeys
 .downPressed
 	ld a, [wCurrentMenuItem]

@@ -1,6 +1,6 @@
 FanClubPicture1:
 	ld a, RAPIDASH
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	call DisplayMonFrontSpriteInBox
 	call EnableAutoTextBoxDrawing
 	tx_pre FanClubPicture1Text
@@ -12,7 +12,7 @@ FanClubPicture1Text::
 
 FanClubPicture2:
 	ld a, FEAROW
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	call DisplayMonFrontSpriteInBox
 	call EnableAutoTextBoxDrawing
 	tx_pre FanClubPicture2Text

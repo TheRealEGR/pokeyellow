@@ -41,7 +41,7 @@ DrawHP_:
 	call DrawHPBar
 	pop hl
 	ldh a, [hUILayoutFlags]
-	bit BIT_PARTY_MENU_HP_BAR, a
+	bit 0, a
 	jr z, .printFractionBelowBar
 	ld bc, $9 ; right of bar
 	jr .printFraction
@@ -71,14 +71,14 @@ StatusScreen:
 ; mon is in a box or daycare
 	ld a, [wLoadedMonBoxLevel]
 	ld [wLoadedMonLevel], a
-	ld [wCurEnemyLevel], a
+	ld [wCurEnemyLVL], a
 	ld hl, wLoadedMonHPExp - 1
 	ld de, wLoadedMonStats
 	ld b, $1
 	call CalcStats ; Recalculate stats
 .DontRecalculate
-	ld hl, wStatusFlags2
-	set BIT_NO_AUDIO_FADE_OUT, [hl]
+	ld hl, wd72c
+	set 1, [hl]
 	ld a, $33
 	ldh [rNR50], a ; Reduce the volume
 	call GBPalWhiteOutWithDelay3
@@ -139,11 +139,11 @@ StatusScreen:
 	hlcoord 14, 2
 	call PrintLevel ; Pokémon level
 	ld a, [wMonHIndex]
-	ld [wPokedexNum], a
-	ld [wCurSpecies], a
+	ld [wd11e], a
+	ld [wd0b5], a
 	predef IndexToPokedex
 	hlcoord 3, 7
-	ld de, wPokedexNum
+	ld de, wd11e
 	lb bc, LEADING_ZEROES | 1, 3
 	call PrintNumber ; Pokémon no.
 	hlcoord 11, 10
@@ -186,10 +186,10 @@ StatusScreen:
 	callfar PlayPikachuSoundClip
 	jr .continue
 .playRegularCry
-	ld a, [wCurPartySpecies]
-	call PlayCry
+	ld a, [wcf91]
+	call PlayCry ; play Pokémon cry
 .continue
-	call WaitForTextScrollButtonPress
+	call WaitForTextScrollButtonPress ; wait for button
 	pop af
 	ldh [hTileAnimations], a
 	ret
@@ -434,7 +434,7 @@ StatusScreen2:
 	hlcoord 9, 1
 	call StatusScreen_ClearName
 	ld a, [wMonHIndex]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	hlcoord 9, 1
 	call PlaceString
@@ -444,8 +444,8 @@ StatusScreen2:
 	call WaitForTextScrollButtonPress ; wait for button
 	pop af
 	ldh [hTileAnimations], a
-	ld hl, wStatusFlags2
-	res BIT_NO_AUDIO_FADE_OUT, [hl]
+	ld hl, wd72c
+	res 1, [hl]
 	ld a, $77
 	ldh [rNR50], a
 	call GBPalWhiteOut

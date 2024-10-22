@@ -1,7 +1,7 @@
 PickUpItem:
 	call EnableAutoTextBoxDrawing
 
-	ldh a, [hSpriteIndex]
+	ldh a, [hSpriteIndexOrTextID]
 	ld b, a
 	ld hl, wMissableObjectList
 .missableObjectsListLoop
@@ -18,7 +18,7 @@ PickUpItem:
 	ldh [hMissableObjectIndex], a
 
 	ld hl, wMapSpriteExtraData
-	ldh a, [hSpriteIndex]
+	ldh a, [hSpriteIndexOrTextID]
 	dec a
 	add a
 	ld d, 0

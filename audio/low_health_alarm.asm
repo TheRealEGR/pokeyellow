@@ -1,12 +1,12 @@
 Music_DoLowHealthAlarm::
 	ld a, [wLowHealthAlarm]
-	cp DISABLE_LOW_HEALTH_ALARM
+	cp $ff
 	jr z, .disableAlarm
 
-	bit BIT_LOW_HEALTH_ALARM, a
-	ret z
+	bit 7, a  ;alarm enabled?
+	ret z     ;nope
 
-	and LOW_HEALTH_TIMER_MASK
+	and $7f   ;low 7 bits are the timer.
 	jr nz, .notToneHi ;if timer > 0, play low tone.
 
 	call .playToneHi
@@ -19,15 +19,15 @@ Music_DoLowHealthAlarm::
 	call .playToneLo ;actually set the sound registers.
 
 .noTone
-	ld a, CRY_SFX_END
+	ld a, $86
 	ld [wChannelSoundIDs + CHAN5], a ;disable sound channel?
 	ld a, [wLowHealthAlarm]
-	and LOW_HEALTH_TIMER_MASK
+	and $7f ;decrement alarm timer.
 	dec a
 
 .resetTimer
 	; reset the timer and enable flag.
-	set BIT_LOW_HEALTH_ALARM, a
+	set 7, a
 	ld [wLowHealthAlarm], a
 	ret
 

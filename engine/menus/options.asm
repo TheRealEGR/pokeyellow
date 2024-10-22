@@ -43,9 +43,9 @@ OptionMenuJumpTable:
 OptionsMenu_TextSpeed:
 	call GetTextSpeed
 	ldh a, [hJoy5]
-	bit BIT_D_RIGHT, a
+	bit 4, a ; right
 	jr nz, .pressedRight
-	bit BIT_D_LEFT, a
+	bit 5, a
 	jr nz, .pressedLeft
 	jr .nonePressed
 .pressedRight
@@ -193,9 +193,9 @@ OptionsMenu_SpeakerSettings:
 	swap a
 	ld c, a
 	ldh a, [hJoy5]
-	bit BIT_D_RIGHT, a
+	bit 4, a
 	jr nz, .pressedRight
-	bit BIT_D_LEFT, a
+	bit 5, a
 	jr nz, .pressedLeft
 	jr .asm_41dca
 .pressedRight
@@ -248,9 +248,9 @@ Earphone3SoundText:
 OptionsMenu_GBPrinterBrightness:
 	call Func_41e7b
 	ldh a, [hJoy5]
-	bit BIT_D_RIGHT, a
+	bit 4, a
 	jr nz, .pressedRight
-	bit BIT_D_LEFT, a
+	bit 5, a
 	jr nz, .pressedLeft
 	jr .asm_41e32
 .pressedRight

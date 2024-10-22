@@ -95,7 +95,7 @@ WardensHouseWardenText:
 
 WardensHouseDisplayText:
 	text_asm
-	ldh a, [hTextID]
+	ldh a, [hSpriteIndexOrTextID]
 	cp TEXT_WARDENSHOUSE_DISPLAY_LEFT
 	ld hl, .MerchandiseText
 	jr nz, .print_text

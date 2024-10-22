@@ -113,8 +113,8 @@ GainExperience:
 	ld b, 0
 	ld hl, wPartySpecies
 	add hl, bc
-	ld a, [hl]
-	ld [wCurSpecies], a
+	ld a, [hl] ; species
+	ld [wd0b5], a
 	call GetMonHeader
 	ld d, MAX_LEVEL
 	callfar CalcExperience ; get max exp
@@ -160,17 +160,17 @@ GainExperience:
 	ld a, [hl] ; current level
 	cp d
 	jp z, .nextMon ; if level didn't change, go to next mon
-	ld a, [wCurEnemyLevel]
+	ld a, [wCurEnemyLVL]
 	push af
 	push hl
 	ld a, d
-	ld [wCurEnemyLevel], a
+	ld [wCurEnemyLVL], a
 	ld [hl], a
 	ld bc, wPartyMon1Species - wPartyMon1Level
 	add hl, bc
-	ld a, [hl]
-	ld [wCurSpecies], a
-	ld [wPokedexNum], a
+	ld a, [hl] ; species
+	ld [wd0b5], a
+	ld [wd11e], a
 	call GetMonHeader
 	ld bc, (wPartyMon1MaxHP + 1) - wPartyMon1Species
 	add hl, bc
@@ -224,7 +224,7 @@ GainExperience:
 	call CopyData
 	pop hl
 	ld a, [wPlayerBattleStatus3]
-	bit TRANSFORMED, a
+	bit 3, a ; is the mon transformed?
 	jr nz, .recalcStatChanges
 ; the mon is not transformed, so update the unmodified stats
 	ld de, wPlayerMonUnmodifiedLevel
@@ -257,8 +257,8 @@ GainExperience:
 	call LoadScreenTilesFromBuffer1
 	xor a ; PLAYER_PARTY_DATA
 	ld [wMonDataLocation], a
-	ld a, [wCurSpecies]
-	ld [wPokedexNum], a
+	ld a, [wd0b5]
+	ld [wd11e], a
 	predef LearnMoveFromLevelUp
 	ld hl, wCanEvolveFlags
 	ld a, [wWhichPokemon]
@@ -267,7 +267,7 @@ GainExperience:
 	predef FlagActionPredef
 	pop hl
 	pop af
-	ld [wCurEnemyLevel], a
+	ld [wCurEnemyLVL], a
 
 .nextMon
 	ld a, [wPartyCount]
@@ -312,7 +312,7 @@ DivideExpDataByNumMonsGainingExp:
 	jr nz, .countSetBitsLoop
 	cp $2
 	ret c ; return if only one mon is gaining exp
-	ld [wTempByteValue], a ; store number of mons gaining exp
+	ld [wd11e], a ; store number of mons gaining exp
 	ld hl, wEnemyMonBaseStats
 	ld c, wEnemyMonBaseExp + 1 - wEnemyMonBaseStats
 .divideLoop
@@ -320,7 +320,7 @@ DivideExpDataByNumMonsGainingExp:
 	ldh [hDividend], a
 	ld a, [hl]
 	ldh [hDividend + 1], a
-	ld a, [wTempByteValue]
+	ld a, [wd11e]
 	ldh [hDivisor], a
 	ld b, $2
 	call Divide ; divide value by number of mons gaining exp

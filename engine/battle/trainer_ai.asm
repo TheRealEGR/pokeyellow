@@ -641,27 +641,27 @@ AICureStatus:
 	ld [hl], a ; clear status in enemy team roster
 	ld [wEnemyMonStatus], a ; clear status of active enemy
 	ld hl, wEnemyBattleStatus3
-	res BADLY_POISONED, [hl]
+	res 0, [hl]
 	ret
 
 AIUseXAccuracy: ; unused
 	call AIPlayRestoringSFX
 	ld hl, wEnemyBattleStatus2
-	set USING_X_ACCURACY, [hl]
+	set 0, [hl]
 	ld a, X_ACCURACY
 	jp AIPrintItemUse
 
 AIUseGuardSpec:
 	call AIPlayRestoringSFX
 	ld hl, wEnemyBattleStatus2
-	set PROTECTED_BY_MIST, [hl]
+	set 1, [hl]
 	ld a, GUARD_SPEC
 	jp AIPrintItemUse
 
 AIUseDireHit: ; unused
 	call AIPlayRestoringSFX
 	ld hl, wEnemyBattleStatus2
-	set GETTING_PUMPED, [hl]
+	set 2, [hl]
 	ld a, DIRE_HIT
 	jp AIPrintItemUse
 
@@ -741,7 +741,7 @@ AIPrintItemUse:
 AIPrintItemUse_:
 ; print "x used [wAIItem] on z!"
 	ld a, [wAIItem]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetItemName
 	ld hl, AIBattleUseItemText
 	jp PrintText

@@ -10,13 +10,13 @@ NamePointers::
 
 GetName::
 ; arguments:
-; [wNameListIndex] = which name
+; [wd0b5] = which name
 ; [wNameListType] = which list
 ; [wPredefBank] = bank of list
 ;
 ; returns pointer to name in de
-	ld a, [wNameListIndex]
-	ld [wNamedObjectIndex], a
+	ld a, [wd0b5]
+	ld [wd11e], a
 
 	; TM names are separate from item names.
 	; BUG: This applies to all names instead of just items.
@@ -66,7 +66,7 @@ GetName::
 	ld h, a
 	ldh a, [hSwapTemp + 1]
 	ld l, a
-	ld a, [wNameListIndex]
+	ld a, [wd0b5]
 	ld b, a ; wanted entry
 	ld c, 0 ; entry counter
 .nextName
@@ -82,14 +82,14 @@ GetName::
 	jr nz, .nextName
 	ld h, d
 	ld l, e
-	ld de, wNameBuffer
+	ld de, wcd6d
 	ld bc, NAME_BUFFER_LENGTH
 	call CopyData
 .gotPtr
 	ld a, e
-	ld [wUnusedNamePointer], a
+	ld [wUnusedCF8D], a
 	ld a, d
-	ld [wUnusedNamePointer + 1], a
+	ld [wUnusedCF8D + 1], a
 	pop de
 	pop bc
 	pop hl

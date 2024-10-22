@@ -1,5 +1,5 @@
 GetTrainerName_::
-	ld hl, wLinkEnemyTrainerName
+	ld hl, wGrassRate
 	ld a, [wLinkState]
 	and a
 	jr nz, .foundName
@@ -11,14 +11,14 @@ GetTrainerName_::
 	jr z, .foundName
 	cp RIVAL3
 	jr z, .foundName
-	ld [wNameListIndex], a
+	ld [wd0b5], a
 	ld a, TRAINER_NAME
 	ld [wNameListType], a
 	ld a, BANK(TrainerNames)
 	ld [wPredefBank], a
 	call GetName
-	ld hl, wNameBuffer
+	ld hl, wcd6d
 .foundName
 	ld de, wTrainerName
-	ld bc, ITEM_NAME_LENGTH
+	ld bc, $d
 	jp CopyData

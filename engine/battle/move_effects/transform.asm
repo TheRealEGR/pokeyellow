@@ -109,7 +109,7 @@ TransformEffect_:
 ; original (unmodified) stats and stat mods
 	pop hl
 	ld a, [hl]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	ld hl, wEnemyMonUnmodifiedAttack
 	ld de, wPlayerMonUnmodifiedAttack

@@ -1,7 +1,7 @@
 SaffronGym_Script:
 	ld hl, wCurrentMapScriptFlags
-	bit BIT_CUR_MAP_LOADED_2, [hl]
-	res BIT_CUR_MAP_LOADED_2, [hl]
+	bit 6, [hl]
+	res 6, [hl]
 	call nz, .LoadNames
 	call EnableAutoTextBoxDrawing
 	ld hl, SaffronGymTrainerHeaders
@@ -45,20 +45,20 @@ SaffronGymSabrinaPostBattle:
 
 SaffronGymSabrinaReceiveTM46Script:
 	ld a, TEXT_SAFFRONGYM_SABRINA_MARSH_BADGE_INFO
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	SetEvent EVENT_BEAT_SABRINA
 	lb bc, TM_PSYWAVE, 1
 	call GiveItem
 	jr nc, .BagFull
 	ld a, TEXT_SAFFRONGYM_SABRINA_RECEIVED_TM46
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	SetEvent EVENT_GOT_TM46
 	jr .gymVictory
 .BagFull
 	ld a, TEXT_SAFFRONGYM_SABRINA_TM46_NO_ROOM
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 .gymVictory
 	ld hl, wObtainedBadges
@@ -120,9 +120,9 @@ SaffronGymSabrinaText:
 .beforeBeat
 	ld hl, .Text
 	call PrintText
-	ld hl, wStatusFlags3
-	set BIT_TALKED_TO_TRAINER, [hl]
-	set BIT_PRINT_END_BATTLE_TEXT, [hl]
+	ld hl, wd72d
+	set 6, [hl]
+	set 7, [hl]
 	ld hl, .ReceivedMarshBadgeText
 	ld de, .ReceivedMarshBadgeText
 	call SaveEndBattleTextPointers

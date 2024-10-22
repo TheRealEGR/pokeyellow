@@ -15,7 +15,7 @@ LoadSpinnerArrowTiles::
 	ld hl, GymSpinnerArrows
 .gotSpinnerArrows
 	ld a, [wSimulatedJoypadStatesIndex]
-	bit 0, a ; even or odd?
+	bit 0, a
 	jr nz, .alternateGraphics
 	ld de, 6 * 4
 	add hl, de

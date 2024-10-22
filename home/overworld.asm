@@ -4,39 +4,39 @@ EnterMap::
 	ld [wJoyIgnore], a
 	call LoadMapData
 	farcall ClearVariablesOnEnterMap
-	ld hl, wStatusFlags2
-	bit BIT_WILD_ENCOUNTER_COOLDOWN, [hl]
+	ld hl, wd72c
+	bit 0, [hl] ; has the player already made 3 steps since the last battle?
 	jr z, .skipGivingThreeStepsOfNoRandomBattles
 	ld a, 3 ; minimum number of steps between battles
 	ld [wNumberOfNoRandomBattleStepsLeft], a
 .skipGivingThreeStepsOfNoRandomBattles
-	ld hl, wStatusFlags4
-	bit BIT_BATTLE_OVER_OR_BLACKOUT, [hl]
-	res BIT_BATTLE_OVER_OR_BLACKOUT, [hl]
+	ld hl, wd72e
+	bit 5, [hl] ; did a battle happen immediately before this?
+	res 5, [hl] ; unset the "battle just happened" flag
 	call z, ResetUsingStrengthOutOfBattleBit
 	call nz, MapEntryAfterBattle
-	ld hl, wStatusFlags6
+	ld hl, wd732
 	ld a, [hl]
-	and (1 << BIT_FLY_WARP) | (1 << BIT_DUNGEON_WARP)
+	and 1 << 4 | 1 << 3 ; fly warp or dungeon warp
 	jr z, .didNotEnterUsingFlyWarpOrDungeonWarp
 	farcall EnterMapAnim
 	call UpdateSprites
-	ld hl, wStatusFlags6
-	res BIT_FLY_WARP, [hl]
-	ld hl, wStatusFlags4
-	res BIT_NO_BATTLES, [hl]
+	ld hl, wd732
+	res 3, [hl]
+	ld hl, wd72e
+	res 4, [hl]
 .didNotEnterUsingFlyWarpOrDungeonWarp
 	call IsSurfingPikachuInParty
 	farcall CheckForceBikeOrSurf ; handle currents in SF islands and forced bike riding in cycling road
-	ld hl, wStatusFlags6
-	bit BIT_DUNGEON_WARP, [hl]
-	res BIT_DUNGEON_WARP, [hl]
-	ld hl, wStatusFlags3
-	res BIT_NO_NPC_FACE_PLAYER, [hl]
+	ld hl, wd732
+	bit 4, [hl]
+	res 4, [hl]
+	ld hl, wd72d
+	res 5, [hl]
 	call UpdateSprites
 	ld hl, wCurrentMapScriptFlags
-	set BIT_CUR_MAP_LOADED_1, [hl]
-	set BIT_CUR_MAP_LOADED_2, [hl]
+	set 5, [hl]
+	set 6, [hl]
 	xor a
 	ld [wJoyIgnore], a
 
@@ -55,18 +55,18 @@ OverworldLoopLessDelay::
 	ld a, [wSafariZoneGameOver]
 	and a
 	jp nz, WarpFound2
-	ld hl, wStatusFlags3
-	bit BIT_WARP_FROM_CUR_SCRIPT, [hl]
-	res BIT_WARP_FROM_CUR_SCRIPT, [hl]
+	ld hl, wd72d
+	bit 3, [hl]
+	res 3, [hl]
 	jp nz, WarpFound2
-	ld a, [wStatusFlags6]
-	and (1 << BIT_FLY_WARP) | (1 << BIT_DUNGEON_WARP)
+	ld a, [wd732]
+	and 1 << 4 | 1 << 3 ; fly warp or dungeon warp
 	jp nz, HandleFlyWarpOrDungeonWarp
 	ld a, [wCurOpponent]
 	and a
 	jp nz, .newBattle
-	ld a, [wStatusFlags5]
-	bit BIT_SCRIPTED_MOVEMENT_STATE, a
+	ld a, [wd730]
+	bit 7, a ; are we simulating button presses?
 	jr z, .notSimulating
 	ldh a, [hJoyHeld]
 	jr .checkIfStartIsPressed
@@ -77,14 +77,14 @@ OverworldLoopLessDelay::
 	jr z, .startButtonNotPressed
 ; if START is pressed
 	xor a ; TEXT_START_MENU
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	jp .displayDialogue
 .startButtonNotPressed
 	bit BIT_A_BUTTON, a
 	jp z, .checkIfDownButtonIsPressed
 ; if A is pressed
-	ld a, [wStatusFlags5]
-	bit BIT_UNKNOWN_5_2, a
+	ld a, [wd730]
+	bit 2, a
 	jp nz, .noDirectionButtonsPressed
 	call IsPlayerCharacterBeingControlledByGame
 	jr nz, .checkForOpponent
@@ -93,19 +93,19 @@ OverworldLoopLessDelay::
 	and a
 	jp z, OverworldLoop ; jump if a hidden object or bookshelf was found, but not if a card key door was found
 	xor a
-	ld [wd435], a ; new yellow address
+	ld [wd436], a ; new yellow address
 	call IsSpriteOrSignInFrontOfPlayer
 	call Func_0ffe
-	ldh a, [hTextID]
+	ldh a, [hSpriteIndexOrTextID]
 	and a
 	jp z, OverworldLoop
 .displayDialogue
 	predef GetTileAndCoordsInFrontOfPlayer
 	call UpdateSprites
-	ld a, [wMiscFlags]
-	bit BIT_TURNING, a
+	ld a, [wFlags_0xcd60]
+	bit 2, a
 	jr nz, .checkForOpponent
-	bit BIT_SEEN_BY_TRAINER, a
+	bit 0, a
 	jr nz, .checkForOpponent
 	lda_coord 8, 9
 	ld [wTilePlayerStandingOn], a ; checked when using Surf for forbidden tile pairs
@@ -124,10 +124,10 @@ OverworldLoopLessDelay::
 
 .noDirectionButtonsPressed
 	call UpdateSprites
-	ld hl, wMiscFlags
-	res BIT_TURNING, [hl]
+	ld hl, wFlags_0xcd60
+	res 2, [hl]
 	xor a
-	ld [wd434], a
+	ld [wd435], a
 	ld a, 1
 	ld [wCheckFor180DegreeTurn], a
 	ld a, [wPlayerMovingDirection] ; the direction that was pressed last time
@@ -174,8 +174,8 @@ OverworldLoopLessDelay::
 
 .handleDirectionButtonPress
 	ld [wPlayerDirection], a ; new direction
-	ld a, [wStatusFlags5]
-	bit BIT_SCRIPTED_MOVEMENT_STATE, a
+	ld a, [wd730]
+	bit 7, a ; are we simulating button presses?
 	jr nz, .noDirectionChange ; ignore direction changes if we are
 	ld a, [wCheckFor180DegreeTurn]
 	and a
@@ -186,10 +186,10 @@ OverworldLoopLessDelay::
 	cp b
 	jr z, .noDirectionChange
 	ld a, $8
-	ld [wd434], a
+	ld [wd435], a
 ; unlike in red/blue, yellow does not have the 180 degrees odd code
-	ld hl, wMiscFlags
-	set BIT_TURNING, [hl]
+	ld hl, wFlags_0xcd60
+	set 2, [hl]
 	xor a
 	ld [wCheckFor180DegreeTurn], a
 	ld a, [wPlayerDirection]
@@ -210,8 +210,8 @@ OverworldLoopLessDelay::
 	jr nc, .noCollision
 ; collision occurred
 	push hl
-	ld hl, wMovementFlags
-	bit BIT_STANDING_ON_WARP, [hl]
+	ld hl, wd736
+	bit 2, [hl] ; standing on warp flag
 	pop hl
 	jp z, OverworldLoop
 ; collision occurred while standing on a warp
@@ -236,10 +236,10 @@ OverworldLoopLessDelay::
 	call UpdateSprites
 
 .moveAhead2
-	ld hl, wMiscFlags
-	res BIT_TURNING, [hl]
+	ld hl, wFlags_0xcd60
+	res 2, [hl]
 	xor a
-	ld [wd434], a
+	ld [wd435], a
 	call DoBikeSpeedup
 	call AdvancePlayerSprite
 	ld a, [wWalkCounter]
@@ -247,7 +247,7 @@ OverworldLoopLessDelay::
 	jp nz, CheckMapConnections ; it seems like this check will never succeed (the other place where CheckMapConnections is run works)
 ; walking animation finished
 	call StepCountCheck
-	CheckEvent EVENT_IN_SAFARI_ZONE
+	CheckEvent EVENT_IN_SAFARI_ZONE ; in the safari zone?
 	jr z, .notSafariZone
 	farcall SafariZoneCheckSteps
 	ld a, [wSafariZoneGameOver]
@@ -263,17 +263,17 @@ OverworldLoopLessDelay::
 	jp nz, HandleBlackOut ; if all pokemon fainted
 .newBattle
 	call NewBattle
-	ld hl, wMovementFlags
-	res BIT_STANDING_ON_WARP, [hl]
+	ld hl, wd736
+	res 2, [hl] ; standing on warp flag
 	jp nc, CheckWarpsNoCollision ; check for warps if there was no battle
 .battleOccurred
-	ld hl, wStatusFlags3
-	res BIT_TALKED_TO_TRAINER, [hl]
-	ld hl, wStatusFlags7
-	res BIT_TRAINER_BATTLE, [hl]
+	ld hl, wd72d
+	res 6, [hl]
+	ld hl, wFlags_D733
+	res 3, [hl]
 	ld hl, wCurrentMapScriptFlags
-	set BIT_CUR_MAP_LOADED_1, [hl]
-	set BIT_CUR_MAP_LOADED_2, [hl]
+	set 5, [hl]
+	set 6, [hl]
 	xor a
 	ldh [hJoyHeld], a
 	ld a, [wCurMap]
@@ -281,8 +281,8 @@ OverworldLoopLessDelay::
 	jr nz, .notCinnabarGym
 	SetEvent EVENT_2A7
 .notCinnabarGym
-	ld hl, wStatusFlags4
-	set BIT_BATTLE_OVER_OR_BLACKOUT, [hl]
+	ld hl, wd72e
+	set 5, [hl]
 	ld a, [wCurMap]
 	cp OAKS_LAB
 	jp z, .noFaintCheck ; no blacking out if the player lost to the rival in Oak's lab
@@ -296,20 +296,20 @@ OverworldLoopLessDelay::
 	jp EnterMap
 
 StepCountCheck::
-	ld a, [wStatusFlags5]
-	bit BIT_SCRIPTED_MOVEMENT_STATE, a
+	ld a, [wd730]
+	bit 7, a
 	jr nz, .doneStepCounting ; if button presses are being simulated, don't count steps
 ; step counting
 	ld hl, wStepCounter
 	dec [hl]
-	ld a, [wStatusFlags2]
-	bit BIT_WILD_ENCOUNTER_COOLDOWN, a
+	ld a, [wd72c]
+	bit 0, a
 	jr z, .doneStepCounting
 	ld hl, wNumberOfNoRandomBattleStepsLeft
 	dec [hl]
 	jr nz, .doneStepCounting
-	ld hl, wStatusFlags2
-	res BIT_WILD_ENCOUNTER_COOLDOWN, [hl] ; indicate that the player has stepped thrice since the last battle
+	ld hl, wd72c
+	res 0, [hl] ; indicate that the player has stepped thrice since the last battle
 .doneStepCounting
 	ret
 
@@ -322,13 +322,13 @@ AllPokemonFainted::
 ; function to determine if there will be a battle and execute it (either a trainer battle or wild battle)
 ; sets carry if a battle occurred and unsets carry if not
 NewBattle::
-	ld a, [wStatusFlags3]
-	bit BIT_ON_DUNGEON_WARP, a
+	ld a, [wd72d]
+	bit 4, a
 	jr nz, .noBattle
 	call IsPlayerCharacterBeingControlledByGame
 	jr nz, .noBattle ; no battle if the player character is under the game's control
-	ld a, [wStatusFlags4]
-	bit BIT_NO_BATTLES, a
+	ld a, [wd72e]
+	bit 4, a
 	jr nz, .noBattle
 	farjp InitBattle
 .noBattle
@@ -340,8 +340,8 @@ DoBikeSpeedup::
 	ld a, [wWalkBikeSurfState]
 	dec a ; riding a bike?
 	ret nz
-	ld a, [wMovementFlags]
-	bit BIT_LEDGE_OR_FISHING, a
+	ld a, [wd736]
+	bit 6, a
 	ret nz
 	ld a, [wNPCMovementScriptPointerTableNum]
 	and a
@@ -379,8 +379,8 @@ CheckWarpsNoCollisionLoop::
 ; if a match was found
 	push hl
 	push bc
-	ld hl, wMovementFlags
-	set BIT_STANDING_ON_WARP, [hl]
+	ld hl, wd736
+	set 2, [hl] ; standing on warp flag
 	farcall IsPlayerStandingOnDoorTileOrWarpTile
 	pop bc
 	pop hl
@@ -392,8 +392,8 @@ CheckWarpsNoCollisionLoop::
 	pop hl
 	jr nc, CheckWarpsNoCollisionRetry2
 ; if the extra check passed
-	ld a, [wStatusFlags7]
-	bit BIT_FORCED_WARP, a
+	ld a, [wFlags_D733]
+	bit 2, a
 	jr nz, WarpFound1
 	push de
 	push bc
@@ -464,7 +464,7 @@ WarpFound2::
 	ld a, [wCurMap]
 	ld [wLastMap], a
 	ld a, [wCurMapWidth]
-	ld [wUnusedLastMapWidth], a
+	ld [wUnusedD366], a ; not read
 	ldh a, [hWarpDestinationMap]
 	ld [wCurMap], a
 	cp ROCK_TUNNEL_1F
@@ -491,15 +491,15 @@ WarpFound2::
 	jr nz, .notWarpPad
 ; if the player is on a warp pad
 	call LeaveMapAnim
-	ld hl, wStatusFlags6
-	set BIT_FLY_WARP, [hl]
+	ld hl, wd732
+	set 3, [hl]
 	jr .skipMapChangeSound
 .notWarpPad
 	call PlayMapChangeSound
 .skipMapChangeSound
-	ld hl, wMovementFlags
-	res BIT_STANDING_ON_DOOR, [hl]
-	res BIT_EXITING_DOOR, [hl]
+	ld hl, wd736
+	res 0, [hl]
+	res 1, [hl]
 	callfar SetPikachuSpawnWarpPad
 	jr .done
 
@@ -511,8 +511,8 @@ WarpFound2::
 	xor a
 	ld [wMapPalOffset], a
 .done
-	ld hl, wMovementFlags
-	set BIT_STANDING_ON_DOOR, [hl] ; have the player's sprite step out from the door (if there is one)
+	ld hl, wd736
+	set 0, [hl] ; have the player's sprite step out from the door (if there is one)
 	call IgnoreInputForHalfSecond
 	jp EnterMap
 
@@ -737,11 +737,12 @@ MapEntryAfterBattle::
 HandleBlackOut::
 ; For when all the player's pokemon faint.
 ; Does not print the "blacked out" message.
+
 	call GBFadeOutToBlack
 	ld a, $08
 	call StopMusic
-	ld hl, wStatusFlags4
-	res BIT_BATTLE_OVER_OR_BLACKOUT, [hl]
+	ld hl, wd72e
+	res 5, [hl]
 	ld a, BANK(PrepareForSpecialWarp) ; also BANK(SpecialEnterMap)
 	call BankswitchCommon
 	callfar ResetStatusAndHalveMoneyOnBlackout
@@ -765,9 +766,9 @@ HandleFlyWarpOrDungeonWarp::
 	ld [wBattleResult], a
 	ld [wIsInBattle], a
 	ld [wMapPalOffset], a
-	ld hl, wStatusFlags6
-	set BIT_FLY_OR_DUNGEON_WARP, [hl]
-	res BIT_ALWAYS_ON_BIKE, [hl]
+	ld hl, wd732
+	set 2, [hl] ; fly warp or dungeon warp
+	res 5, [hl] ; forced to ride bike
 	call LeaveMapAnim
 	call Func_07c4
 	ld a, BANK(PrepareForSpecialWarp)
@@ -784,8 +785,8 @@ Func_07c4::
 	ret z
 	xor a
 	ld [wWalkBikeSurfState], a
-	ld hl, wStatusFlags6
-	bit BIT_DUNGEON_WARP, [hl]
+	ld hl, wd732
+	bit 4, [hl]
 	ret z
 	call PlayDefaultMusic
 	ret
@@ -868,10 +869,10 @@ LoadTilesetTilePatternData::
 	ld a, [wTilesetBank]
 	jp FarCopyData
 
-; this loads the current map's complete tile map (which references blocks, not individual tiles) to wOverworldMap
+; this loads the current maps complete tile map (which references blocks, not individual tiles) to C6E8
 ; it can also load partial tile maps of connected maps into a border of length 3 around the current map
 LoadTileBlockMap::
-; fill wOverworldMap-wOverworldMapEnd with the background tile
+; fill C6E8-CBFB with the background tile
 	ld hl, wOverworldMap
 	ld bc, wOverworldMapEnd - wOverworldMap
 	ld a, [wMapBackgroundTile] ; background tile number
@@ -1054,11 +1055,10 @@ LoadEastWestConnectionsTileMap::
 	ret
 
 ; function to check if there is a sign or sprite in front of the player
-; if so, it is stored in [hTextID]
-; if not, [hTextID] is set to 0
+; if so, carry is set. otherwise, carry is cleared
 IsSpriteOrSignInFrontOfPlayer::
 	xor a
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	ld a, [wNumSigns]
 	and a
 	jr z, .extendRangeOverCounter
@@ -1079,8 +1079,7 @@ IsSpriteOrSignInFrontOfPlayer::
 	dec b
 	jr nz, .counterTilesLoop
 
-; part of the above function, but sometimes its called on its own, when signs are irrelevant
-; the caller must zero [hTextID]
+; sets carry flag if a sprite is in front of the player, resets if not
 IsSpriteInFrontOfPlayer::
 	ld d, $10 ; talking range in pixels (normal range)
 IsSpriteInFrontOfPlayer2::
@@ -1162,14 +1161,14 @@ IsSpriteInFrontOfPlayer2::
 	and $f0
 	inc a
 	ld l, a ; hl = x#SPRITESTATEDATA1_MOVEMENTSTATUS
-	set BIT_FACE_PLAYER, [hl]
+	set 7, [hl] ; set flag to make the sprite face the player
 	ld a, e
-	ldh [hSpriteIndex], a
-	ldh a, [hSpriteIndex] ; possible useless read because a already has the value of the read address
+	ldh [hSpriteIndexOrTextID], a
+	ldh a, [hSpriteIndexOrTextID] ; possible useless read because a already has the value of the read address
 	cp $f
 	jr nz, .dontwritetowd436
 	ld a, $FF
-	ld [wd435], a
+	ld [wd436], a
 .dontwritetowd436
 	scf
 	ret
@@ -1201,7 +1200,7 @@ SignLoop::
 	dec c
 	add hl, bc
 	ld a, [hl]
-	ldh [hTextID], a ; store sign text ID
+	ldh [hSpriteIndexOrTextID], a ; store sign text ID
 	pop bc
 	pop hl
 	scf
@@ -1216,8 +1215,8 @@ SignLoop::
 ; function to check if the player will jump down a ledge and check if the tile ahead is passable (when not surfing)
 ; sets the carry flag if there is a collision, and unsets it if there isn't a collision
 CollisionCheckOnLand::
-	ld a, [wMovementFlags]
-	bit BIT_LEDGE_OR_FISHING, a
+	ld a, [wd736]
+	bit 6, a ; is the player jumping?
 	jr nz, .noCollision
 ; if not jumping a ledge
 	ld a, [wSimulatedJoypadStatesIndex]
@@ -1230,11 +1229,11 @@ CollisionCheckOnLand::
 	nop ; ??? why is this in the code
 	jr nz, .collision
 	xor a
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call IsSpriteInFrontOfPlayer ; check for sprite collisions again? when does the above check fail to detect a sprite collision?
 	jr nc, .asm_0a5c
-	res BIT_FACE_PLAYER, [hl]
-	ldh a, [hTextID]
+	res 7, [hl]
+	ldh a, [hSpriteIndexOrTextID]
 	and a ; was there a sprite collision?
 	jr z, .asm_0a5c
 ; if no sprite collision
@@ -1245,7 +1244,7 @@ CollisionCheckOnLand::
 	ldh a, [hJoyHeld]
 	and $2
 	jr nz, .asm_0a5c
-	ld hl, wd434
+	ld hl, wd435
 	ld a, [hl]
 	and a
 	jr z, .asm_0a5c
@@ -1293,8 +1292,8 @@ CheckForJumpingAndTilePairCollisions::
 	pop de
 	pop hl
 	and a
-	ld a, [wMovementFlags]
-	bit BIT_LEDGE_OR_FISHING, a
+	ld a, [wd736]
+	bit 6, a ; is the player jumping?
 	ret nz
 ; if not jumping
 
@@ -1306,7 +1305,7 @@ CheckForTilePairCollisions::
 	ld a, [wTileInFrontOfPlayer]
 	ld c, a
 .tilePairCollisionLoop
-	ld a, [wCurMapTileset]
+	ld a, [wCurMapTileset] ; tileset number
 	ld b, a
 	ld a, [hli]
 	cp $ff
@@ -1595,8 +1594,8 @@ JoypadOverworld::
 	ret
 
 ForceBikeDown::
-	ld a, [wStatusFlags7]
-	bit BIT_TRAINER_BATTLE, a
+	ld a, [wFlags_D733]
+	bit 3, a ; check if a trainer wants a challenge
 	ret nz
 	ld a, [wCurMap]
 	cp ROUTE_17 ; Cycling Road
@@ -1609,8 +1608,8 @@ ForceBikeDown::
 	ret
 
 AreInputsSimulated::
-	ld a, [wStatusFlags5]
-	bit BIT_SCRIPTED_MOVEMENT_STATE, a
+	ld a, [wd730]
+	bit 7, a
 	ret z
 ; if simulating button presses
 	ldh a, [hJoyHeld]
@@ -1630,17 +1629,17 @@ AreInputsSimulated::
 ; if done simulating button presses
 .doneSimulating
 	xor a
-	ld [wUnusedOverrideSimulatedJoypadStatesIndex], a
+	ld [wUnusedCD3A], a
 	ld [wSimulatedJoypadStatesIndex], a
 	ld [wSimulatedJoypadStatesEnd], a
 	ld [wJoyIgnore], a
 	ldh [hJoyHeld], a
-	ld hl, wMovementFlags
+	ld hl, wd736
 	ld a, [hl]
-	and (1 << BIT_SPINNING) | (1 << BIT_LEDGE_OR_FISHING) | (1 << 5) | (1 << 4) | (1 << 3)
+	and $f8
 	ld [hl], a
-	ld hl, wStatusFlags5
-	res BIT_SCRIPTED_MOVEMENT_STATE, [hl]
+	ld hl, wd730
+	res 7, [hl]
 	ret
 
 GetSimulatedInput::
@@ -1668,8 +1667,8 @@ GetSimulatedInput::
 ; sets carry if there is a collision and clears carry otherwise
 ; This function had a bug in Red/Blue, but it was fixed in Yellow.
 CollisionCheckOnWater::
-	ld a, [wStatusFlags5]
-	bit BIT_SCRIPTED_MOVEMENT_STATE, a
+	ld a, [wd730]
+	bit 7, a
 	jp nz, .noCollision ; return and clear carry if button presses are being simulated
 	ld a, [wPlayerDirection] ; the direction that the player is trying to go in
 	ld d, a
@@ -1696,7 +1695,7 @@ CollisionCheckOnWater::
 	scf
 	jr .done
 .checkIfVermilionDockTileset
-	ld a, [wCurMapTileset]
+	ld a, [wCurMapTileset] ; tileset
 	cp SHIP_PORT ; Vermilion Dock tileset
 	jr nz, .noCollision ; keep surfing if it's not the boarding platform tile
 	jr .stopSurfing ; if it is the boarding platform tile, stop surfing
@@ -1722,8 +1721,8 @@ RunMapScript::
 	push de
 	push bc
 	farcall TryPushingBoulder
-	ld a, [wMiscFlags]
-	bit BIT_BOULDER_DUST, a
+	ld a, [wFlags_0xcd60]
+	bit 1, a ; play boulder dust animation
 	jr z, .afterBoulderEffect
 	farcall DoBoulderDustAnimation
 .afterBoulderEffect
@@ -1746,13 +1745,13 @@ RunMapScript::
 LoadWalkingPlayerSpriteGraphics::
 ; new sprite copy stuff
 	xor a
-	ld [wd472], a
+	ld [wd473], a
 	ld b, BANK(RedSprite)
 	ld de, RedSprite
 	jr LoadPlayerSpriteGraphicsCommon
 
 LoadSurfingPlayerSpriteGraphics2::
-	ld a, [wd472]
+	ld a, [wd473]
 	and a
 	jr z, .asm_0d75
 	dec a
@@ -1760,7 +1759,7 @@ LoadSurfingPlayerSpriteGraphics2::
 	dec a
 	jr z, .asm_0d7c
 .asm_0d75
-	ld a, [wd471]
+	ld a, [wd472]
 	bit 6, a
 	jr z, LoadSurfingPlayerSpriteGraphics
 .asm_0d7c
@@ -1793,7 +1792,7 @@ LoadPlayerSpriteGraphicsCommon::
 	jr nc, .noCarry
 	inc d
 .noCarry
-	set 3, h ; add $800 ($80 tiles) to hl (1 << 3 == $8)
+	set 3, h
 	ld c, $c
 	jp CopyVideoData
 
@@ -1806,15 +1805,15 @@ Func_0db5:: ; XXX
 	farcall LoadMissableObjectData
 asm_0dbd:
 	ld a, [wCurMapTileset]
-	ld [wUnusedCurMapTilesetCopy], a
+	ld [wUnusedD119], a
 	ld a, [wCurMap]
 	call SwitchToMapRomBank
 	ld a, [wCurMapTileset]
 	ld b, a
-	res BIT_NO_PREVIOUS_MAP, a
+	res 7, a
 	ld [wCurMapTileset], a
 	ldh [hPreviousTileset], a
-	bit BIT_NO_PREVIOUS_MAP, b
+	bit 7, b
 	ret nz
 	call GetMapHeaderPointer
 	ld de, wCurMapHeader
@@ -1891,14 +1890,14 @@ asm_0dbd:
 	jr z, .loadSpriteData ; if not, skip this
 	call CopySignData
 .loadSpriteData
-	ld a, [wStatusFlags4]
-	bit BIT_BATTLE_OVER_OR_BLACKOUT, a
+	ld a, [wd72e]
+	bit 5, a ; did a battle happen immediately before this?
 	jr nz, .finishUp ; if so, skip this because battles don't destroy this data
 	call InitSprites
 .finishUp
 	predef LoadTilesetHeader
-	ld a, [wStatusFlags4]
-	bit BIT_BATTLE_OVER_OR_BLACKOUT, a ; did a battle happen immediately before this?
+	ld a, [wd72e]
+	bit 5, a ; did a battle happen immediately before this?
 	jr nz, .skip_pika_spawn
 	callfar SchedulePikachuSpawnForAfterText
 .skip_pika_spawn
@@ -1977,11 +1976,11 @@ LoadMapData::
 	ld b, SET_PAL_OVERWORLD
 	call RunPaletteCommand
 	call LoadPlayerSpriteGraphics
-	ld a, [wStatusFlags6]
-	and 1 << BIT_DUNGEON_WARP | 1 << BIT_FLY_WARP
+	ld a, [wd732]
+	and 1 << 4 | 1 << 3 ; fly warp or dungeon warp
 	jr nz, .restoreRomBank
-	ld a, [wStatusFlags7]
-	bit BIT_NO_MAP_MUSIC, a
+	ld a, [wFlags_D733]
+	bit 1, a
 	jr nz, .restoreRomBank
 	call UpdateMusic6Times ; music related
 	call PlayDefaultMusicFadeOutCurrent ; music related
@@ -2033,7 +2032,7 @@ ResetMapVariables::
 	ldh [hSCY], a
 	ldh [hSCX], a
 	ld [wWalkCounter], a
-	ld [wUnusedCurMapTilesetCopy], a
+	ld [wUnusedD119], a
 	ld [wSpriteSetID], a
 	ld [wWalkBikeSurfStateCopy], a
 	ret
@@ -2104,15 +2103,15 @@ GetMapHeaderPointer::
 IgnoreInputForHalfSecond:
 	ld a, 30
 	ld [wIgnoreInputCounter], a
-	ld hl, wStatusFlags5
+	ld hl, wd730
 	ld a, [hl]
-	or (1 << BIT_DISABLE_JOYPAD) | (1 << BIT_UNKNOWN_5_2) | (1 << BIT_UNKNOWN_5_1)
+	or %00100110
 	ld [hl], a ; set ignore input bit
 	ret
 
 ResetUsingStrengthOutOfBattleBit:
-	ld hl, wStatusFlags1
-	res BIT_STRENGTH_ACTIVE, [hl]
+	ld hl, wd728
+	res 0, [hl]
 	ret
 
 ForceBikeOrSurf::
@@ -2124,15 +2123,15 @@ ForceBikeOrSurf::
 ; Handle the player jumping down
 ; a ledge in the overworld.
 HandleMidJump::
-	ld a, [wMovementFlags]
-	bit BIT_LEDGE_OR_FISHING, a
+	ld a, [wd736]
+	bit 6, a ; jumping down a ledge?
 	ret z
 	farcall _HandleMidJump
 	ret
 
 IsSpinning::
-	ld a, [wMovementFlags]
-	bit BIT_SPINNING, a
+	ld a, [wd736]
+	bit 7, a
 	ret z ; no spinning
 	farjp LoadSpinnerArrowTiles ; spin while moving
 
@@ -2235,9 +2234,9 @@ LoadSprite::
 	ld [hl], a ; store text ID in byte 1 of sprite entry
 	pop hl
 	ldh a, [hLoadSpriteTemp1]
-	bit BIT_TRAINER, a
+	bit 6, a
 	jr nz, .trainerSprite
-	bit BIT_ITEM, a
+	bit 7, a
 	jr nz, .itemBallSprite
 ; for regular sprites
 	push hl

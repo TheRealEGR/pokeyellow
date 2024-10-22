@@ -21,7 +21,7 @@ SafariZoneGateDefaultScript:
 	call ArePlayerCoordsInArray
 	ret nc
 	ld a, TEXT_SAFARIZONEGATE_SAFARI_ZONE_WORKER1_1
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	ld a, A_BUTTON | B_BUTTON | SELECT | START | D_RIGHT | D_LEFT | D_UP | D_DOWN
 	ld [wJoyIgnore], a
@@ -59,7 +59,7 @@ SafariZoneGateWouldYouLikeToJoinScript:
 	ld [wJoyIgnore], a
 	call UpdateSprites
 	ld a, TEXT_SAFARIZONEGATE_SAFARI_ZONE_WORKER1_WOULD_YOU_LIKE_TO_JOIN
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	ld a, A_BUTTON | B_BUTTON | SELECT | START | D_RIGHT | D_LEFT | D_UP | D_DOWN
 	ld [wJoyIgnore], a
@@ -84,7 +84,7 @@ SafariZoneGateLeavingSafariScript:
 	ld a, D_RIGHT | D_LEFT | D_UP | D_DOWN
 	ld [wJoyIgnore], a
 	ld a, TEXT_SAFARIZONEGATE_SAFARI_ZONE_WORKER1_GOOD_HAUL_COME_AGAIN
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	xor a
 	ld [wNumSafariBalls], a
@@ -98,7 +98,7 @@ SafariZoneGateLeavingSafariScript:
 	jr .return
 .leaving_early
 	ld a, TEXT_SAFARIZONEGATE_SAFARI_ZONE_WORKER1_LEAVING_EARLY
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 .return
 	ret

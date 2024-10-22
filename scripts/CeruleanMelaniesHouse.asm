@@ -29,8 +29,8 @@ CeruleanMelanieHouseMelanieText:
 	ld a, $1
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a
 	ld a, BULBASAUR
-	ld [wNamedObjectIndex], a
-	ld [wCurPartySpecies], a
+	ld [wd11e], a
+	ld [wcf91], a
 	call GetMonName
 	ld a, $1
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a

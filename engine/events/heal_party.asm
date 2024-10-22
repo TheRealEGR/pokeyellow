@@ -37,10 +37,10 @@ HealParty:
 	ld hl, Moves
 	ld bc, MOVE_LENGTH
 	call AddNTimes
-	ld de, wMoveData
+	ld de, wcd6d
 	ld a, BANK(Moves)
 	call FarCopyData
-	ld a, [wMoveData + MOVE_PP]
+	ld a, [wcd6d + 5] ; PP is byte 5 of move data
 
 	pop bc
 	pop de
@@ -84,7 +84,7 @@ HealParty:
 .done
 	xor a
 	ld [wWhichPokemon], a
-	ld [wUsingPPUp], a
+	ld [wd11e], a
 
 	ld a, [wPartyCount]
 	ld b, a

@@ -1,6 +1,6 @@
 GiveFossilToCinnabarLab::
-	ld hl, wStatusFlags5
-	set BIT_NO_TEXT_DELAY, [hl]
+	ld hl, wd730
+	set 6, [hl]
 	xor a
 	ld [wCurrentMenuItem], a
 	ld a, A_BUTTON | B_BUTTON
@@ -24,8 +24,8 @@ GiveFossilToCinnabarLab::
 	call TextBoxBorder
 	call UpdateSprites
 	call PrintFossilsInBag
-	ld hl, wStatusFlags5
-	res BIT_NO_TEXT_DELAY, [hl]
+	ld hl, wd730
+	res 6, [hl]
 	call HandleMenuInput
 	bit BIT_B_BUTTON, a
 	jr nz, .cancelledGivingFossil
@@ -98,13 +98,13 @@ PrintFossilsInBag:
 	cp $ff
 	ret z
 	push hl
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetItemName
 	hlcoord 2, 2
 	ldh a, [hItemCounter]
 	ld bc, SCREEN_WIDTH * 2
 	call AddNTimes
-	ld de, wNameBuffer
+	ld de, wcd6d
 	call PlaceString
 	ld hl, hItemCounter
 	inc [hl]
@@ -114,10 +114,10 @@ PrintFossilsInBag:
 ; loads the names of the fossil item and the resulting mon
 LoadFossilItemAndMonName::
 	ld a, [wFossilMon]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetMonName
 	call CopyToStringBuffer
 	ld a, [wFossilItem]
-	ld [wNamedObjectIndex], a
+	ld [wd11e], a
 	call GetItemName
 	ret

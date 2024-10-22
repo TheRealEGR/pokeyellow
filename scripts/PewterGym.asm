@@ -1,7 +1,7 @@
 PewterGym_Script:
 	ld hl, wCurrentMapScriptFlags
-	bit BIT_CUR_MAP_LOADED_2, [hl]
-	res BIT_CUR_MAP_LOADED_2, [hl]
+	bit 6, [hl]
+	res 6, [hl]
 	call nz, .LoadNames
 	call EnableAutoTextBoxDrawing
 	ld hl, PewterGymTrainerHeaders
@@ -46,20 +46,20 @@ PewterGymBrockPostBattle:
 ; fallthrough
 PewterGymScriptReceiveTM34:
 	ld a, TEXT_PEWTERGYM_BROCK_WAIT_TAKE_THIS
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	SetEvent EVENT_BEAT_BROCK
 	lb bc, TM_BIDE, 1
 	call GiveItem
 	jr nc, .BagFull
 	ld a, TEXT_PEWTERGYM_RECEIVED_TM34
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 	SetEvent EVENT_GOT_TM34
 	jr .gymVictory
 .BagFull
 	ld a, TEXT_PEWTERGYM_TM34_NO_ROOM
-	ldh [hTextID], a
+	ldh [hSpriteIndexOrTextID], a
 	call DisplayTextID
 .gymVictory
 	ld hl, wObtainedBadges
@@ -112,9 +112,9 @@ PewterGymBrockText:
 .beforeBeat
 	ld hl, .PreBattleText
 	call PrintText
-	ld hl, wStatusFlags3
-	set BIT_TALKED_TO_TRAINER, [hl]
-	set BIT_PRINT_END_BATTLE_TEXT, [hl]
+	ld hl, wd72d
+	set 6, [hl]
+	set 7, [hl]
 	ld hl, PewterGymBrockReceivedBoulderBadgeText
 	ld de, PewterGymBrockReceivedBoulderBadgeText
 	call SaveEndBattleTextPointers
@@ -189,7 +189,7 @@ PewterGymGuideText:
 	ld a, [wCurrentMenuItem]
 	and a
 	jr nz, .PewterGymGuideBeginAdviceText
-	ld a, [wd471]
+	ld a, [wd472]
 	bit 7, a
 	jp nz, .asm_5c3fa
 	ld hl, PewterGymGuideBeginAdviceText

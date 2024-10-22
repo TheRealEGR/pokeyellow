@@ -4,7 +4,7 @@ ReloadMapSpriteTilePatterns::
 	ld hl, wFontLoaded
 	ld a, [hl]
 	push af
-	res BIT_FONT_LOADED, [hl]
+	res 0, [hl]
 	push hl
 	xor a
 	ld [wSpriteSetID], a

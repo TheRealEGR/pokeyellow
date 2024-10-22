@@ -4,10 +4,10 @@ SetDebugNewGameParty: ; unreferenced except in _DEBUG
 	ld a, [de]
 	cp -1
 	ret z
-	ld [wCurPartySpecies], a
+	ld [wcf91], a
 	inc de
 	ld a, [de]
-	ld [wCurEnemyLevel], a
+	ld [wCurEnemyLVL], a
 	inc de
 	call AddPartyMon
 	jr .loop
@@ -58,7 +58,7 @@ IF DEF(_DEBUG)
 	ld a, [de]
 	cp -1
 	jr z, .items_end
-	ld [wCurItem], a
+	ld [wcf91], a
 	inc de
 	ld a, [de]
 	inc de
