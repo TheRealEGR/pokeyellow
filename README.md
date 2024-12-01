@@ -2,6 +2,10 @@
 
 This is a disassembly of Pokémon Yellow.
 
+This particular fork/hack attempts to add all crossgen evolutions + complete tradebacks + some buffs to existing Pokemon + some QoL changes.
+Note: All the new moves the Pokemon have it they get it in future official Pokemon games, and the buffed stats are either official stat buffs or picking the highest special stat.
+Note 2: The moves will be buffed to its more powerful state.
+
 It builds the following ROMs:
 
 - Pokemon Yellow (UE) [C][!].gbc  `sha1: cc7d03262ebfaf2f06772c1a480c7d9d5f4a38e1`
