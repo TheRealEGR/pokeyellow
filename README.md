@@ -1,6 +1,6 @@
 # Pokémon Yellow [![Build Status][ci-badge]][ci]
 
-This is a disassembly of Pokémon Yellow.
+This is a disassembly of Pokémon Yellow. This would be the new Yellow Crossgen repository, since the last one made it when i was less experienced, and since it started having lots of bugs, i considered starting from zero.
 
 It builds the following ROMs:
 
