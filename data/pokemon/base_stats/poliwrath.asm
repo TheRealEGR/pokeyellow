@@ -1,6 +1,6 @@
 	db DEX_POLIWRATH ; pokedex id
 
-	db  90,  85,  95,  70,  70
+	db  90,  95,  95,  70,  90
 	;   hp  atk  def  spd  spc
 
 	db WATER, FIGHTING ; type
@@ -19,7 +19,8 @@
 	     HYPER_BEAM,   SUBMISSION,   COUNTER,      SEISMIC_TOSS, RAGE,         \
 	     EARTHQUAKE,   FISSURE,      PSYCHIC_M,    MIMIC,        DOUBLE_TEAM,  \
 	     BIDE,         METRONOME,    SKULL_BASH,   REST,         PSYWAVE,      \
-	     SUBSTITUTE,   SURF,         STRENGTH
+	     SUBSTITUTE,   ROCK_SLIDE,   SURF,         ICE_PUNCH,    AMNESIA,      \
+		 STRENGTH
 	; end
 
 	db BANK(PoliwrathPicFront)

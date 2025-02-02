@@ -1,6 +1,6 @@
 	db DEX_DODRIO ; pokedex id
 
-	db  60, 110,  70, 100,  60
+	db  60, 110,  70, 110,  60
 	;   hp  atk  def  spd  spc
 
 	db NORMAL, FLYING ; type
@@ -14,10 +14,10 @@
 	db GROWTH_MEDIUM_FAST ; growth rate
 
 	; tm/hm learnset
-	tmhm WHIRLWIND,    TOXIC,        BODY_SLAM,    TAKE_DOWN,    DOUBLE_EDGE,  \
-	     HYPER_BEAM,   RAGE,         MIMIC,        DOUBLE_TEAM,  REFLECT,      \
-	     BIDE,         SKULL_BASH,   SKY_ATTACK,   REST,         TRI_ATTACK,   \
-	     SUBSTITUTE,   FLY
+	tmhm SWORDS_DANCE, WHIRLWIND,    TOXIC,        BODY_SLAM,    TAKE_DOWN,    \
+		 DOUBLE_EDGE,  HYPER_BEAM,   RAGE,         MIMIC,        DOUBLE_TEAM,  \
+		 REFLECT,      BIDE,         SKULL_BASH,   SKY_ATTACK,   REST,         \
+		 TRI_ATTACK,   SUBSTITUTE,   FLY
 	; end
 
 	db BANK(DodrioPicFront)

@@ -1,6 +1,6 @@
 	db DEX_WIGGLYTUFF ; pokedex id
 
-	db 140,  70,  45,  45,  50
+	db 140,  70,  45,  45,  85
 	;   hp  atk  def  spd  spc
 
 	db NORMAL, NORMAL ; type
@@ -20,7 +20,7 @@
 	     SOLARBEAM,    THUNDERBOLT,  THUNDER,      PSYCHIC_M,    TELEPORT,     \
 	     MIMIC,        DOUBLE_TEAM,  REFLECT,      BIDE,         FIRE_BLAST,   \
 	     SKULL_BASH,   REST,         THUNDER_WAVE, PSYWAVE,      TRI_ATTACK,   \
-	     SUBSTITUTE,   STRENGTH,     FLASH
+	     SUBSTITUTE,   FLAMETHROWER, AMNESIA,      STRENGTH,     FLASH
 	; end
 
 	db BANK(WigglytuffPicFront)

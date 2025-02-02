@@ -1,6 +1,6 @@
 	db DEX_MAROWAK ; pokedex id
 
-	db  60,  80, 110,  45,  50
+	db  60,  80, 110,  45,  80
 	;   hp  atk  def  spd  spc
 
 	db GROUND, GROUND ; type
@@ -14,12 +14,13 @@
 	db GROWTH_MEDIUM_FAST ; growth rate
 
 	; tm/hm learnset
-	tmhm MEGA_PUNCH,   MEGA_KICK,    TOXIC,        BODY_SLAM,    TAKE_DOWN,    \
-	     DOUBLE_EDGE,  BUBBLEBEAM,   WATER_GUN,    ICE_BEAM,     BLIZZARD,     \
-	     HYPER_BEAM,   SUBMISSION,   COUNTER,      SEISMIC_TOSS, RAGE,         \
-	     EARTHQUAKE,   FISSURE,      DIG,          MIMIC,        DOUBLE_TEAM,  \
-	     BIDE,         FIRE_BLAST,   SKULL_BASH,   REST,         SUBSTITUTE,   \
-	     STRENGTH
+	tmhm MEGA_PUNCH,   MEGA_KICK,    SWORDS_DANCE, TOXIC,        BODY_SLAM,    \
+		 TAKE_DOWN,    DOUBLE_EDGE,  BUBBLEBEAM,   WATER_GUN,    ICE_BEAM,     \
+		 BLIZZARD,     HYPER_BEAM,   SUBMISSION,   COUNTER,      SEISMIC_TOSS, \
+		 RAGE,         EARTHQUAKE,   FISSURE,      DIG,          MIMIC,        \
+		 DOUBLE_TEAM,  BIDE,         FIRE_BLAST,   SKULL_BASH,   ROCK_SLIDE,   \
+		 REST,         SUBSTITUTE,   FLAMETHROWER, FIRE_PUNCH,   ICE_PUNCH,    \
+		 THUNDERPUNCH, STRENGTH
 	; end
 
 	db BANK(MarowakPicFront)

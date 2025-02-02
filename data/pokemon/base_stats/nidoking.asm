@@ -1,6 +1,6 @@
 	db DEX_NIDOKING ; pokedex id
 
-	db  81,  92,  77,  85,  75
+	db  81, 102,  77,  85,  85
 	;   hp  atk  def  spd  spc
 
 	db POISON, GROUND ; type
@@ -20,7 +20,8 @@
 	     SEISMIC_TOSS, RAGE,         THUNDERBOLT,  THUNDER,      EARTHQUAKE,   \
 	     FISSURE,      MIMIC,        DOUBLE_TEAM,  REFLECT,      BIDE,         \
 	     FIRE_BLAST,   SKULL_BASH,   REST,         ROCK_SLIDE,   SUBSTITUTE,   \
-	     SURF,         STRENGTH
+	     FLAMETHROWER, FIRE_PUNCH,   ICE_PUNCH,    THUNDERPUNCH, AMNESIA,      \
+		 DIG,          SURF,         STRENGTH
 	; end
 
 	db BANK(NidokingPicFront)

@@ -1,6 +1,6 @@
 	db DEX_MUK ; pokedex id
 
-	db 105, 105,  75,  50,  65
+	db 105, 105,  75,  50, 100
 	;   hp  atk  def  spd  spc
 
 	db POISON, POISON ; type
@@ -16,7 +16,8 @@
 	; tm/hm learnset
 	tmhm TOXIC,        BODY_SLAM,    HYPER_BEAM,   RAGE,         MEGA_DRAIN,   \
 	     THUNDERBOLT,  THUNDER,      MIMIC,        DOUBLE_TEAM,  BIDE,         \
-	     SELFDESTRUCT, FIRE_BLAST,   REST,         EXPLOSION,    SUBSTITUTE
+	     SELFDESTRUCT, FIRE_BLAST,   REST,         EXPLOSION,    SUBSTITUTE,   \
+		 FLAMETHROWER, FIRE_PUNCH,   ICE_PUNCH,    THUNDERPUNCH
 	; end
 
 	db BANK(MukPicFront)

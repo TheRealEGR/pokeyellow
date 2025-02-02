@@ -24,7 +24,8 @@
 	     SELFDESTRUCT, EGG_BOMB,     FIRE_BLAST,   SWIFT,        SKULL_BASH,   \
 	     SOFTBOILED,   DREAM_EATER,  SKY_ATTACK,   REST,         THUNDER_WAVE, \
 	     PSYWAVE,      EXPLOSION,    ROCK_SLIDE,   TRI_ATTACK,   SUBSTITUTE,   \
-	     CUT,          FLY,          SURF,         STRENGTH,     FLASH
+	     FLAMETHROWER, FIRE_PUNCH,   ICE_PUNCH,    THUNDERPUNCH, AMNESIA,      \
+		 CUT,          FLY,          SURF,         STRENGTH,     FLASH
 	; end
 
 	db BANK(MewPicFront)

@@ -1,6 +1,6 @@
 	db DEX_CHARMANDER ; pokedex id
 
-	db  39,  52,  43,  65,  50
+	db  39,  52,  43,  65,  60
 	;   hp  atk  def  spd  spc
 
 	db FIRE, FIRE ; type
@@ -18,7 +18,8 @@
 	     TAKE_DOWN,    DOUBLE_EDGE,  SUBMISSION,   COUNTER,      SEISMIC_TOSS, \
 	     RAGE,         DRAGON_RAGE,  DIG,          MIMIC,        DOUBLE_TEAM,  \
 	     REFLECT,      BIDE,         FIRE_BLAST,   SWIFT,        SKULL_BASH,   \
-	     REST,         SUBSTITUTE,   CUT,          STRENGTH
+	     REST,         SUBSTITUTE,   FLAMETHROWER, FIRE_PUNCH,   THUNDERPUNCH, \
+		 CUT,          STRENGTH
 	; end
 
 	db BANK(CharmanderPicFront)

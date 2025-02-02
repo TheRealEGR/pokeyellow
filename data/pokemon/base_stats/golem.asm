@@ -1,6 +1,6 @@
 	db DEX_GOLEM ; pokedex id
 
-	db  80, 110, 130,  45,  55
+	db  80, 120, 130,  45,  65
 	;   hp  atk  def  spd  spc
 
 	db ROCK, GROUND ; type
@@ -18,7 +18,8 @@
 	     DOUBLE_EDGE,  HYPER_BEAM,   SUBMISSION,   COUNTER,      SEISMIC_TOSS, \
 	     RAGE,         EARTHQUAKE,   FISSURE,      DIG,          MIMIC,        \
 	     DOUBLE_TEAM,  BIDE,         METRONOME,    SELFDESTRUCT, FIRE_BLAST,   \
-	     REST,         EXPLOSION,    ROCK_SLIDE,   SUBSTITUTE,   STRENGTH
+	     REST,         EXPLOSION,    ROCK_SLIDE,   SUBSTITUTE,   FIRE_PUNCH,   \
+		 THUNDERPUNCH, STRENGTH
 	; end
 
 	db BANK(GolemPicFront)

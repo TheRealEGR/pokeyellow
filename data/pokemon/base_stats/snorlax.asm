@@ -1,6 +1,6 @@
 	db DEX_SNORLAX ; pokedex id
 
-	db 160, 110,  65,  30,  65
+	db 160, 110,  65,  30, 110
 	;   hp  atk  def  spd  spc
 
 	db NORMAL, NORMAL ; type
@@ -20,8 +20,8 @@
 	     RAGE,         SOLARBEAM,    THUNDERBOLT,  THUNDER,      EARTHQUAKE,   \
 	     FISSURE,      PSYCHIC_M,    MIMIC,        DOUBLE_TEAM,  REFLECT,      \
 	     BIDE,         METRONOME,    SELFDESTRUCT, FIRE_BLAST,   SKULL_BASH,   \
-	     REST,         PSYWAVE,      ROCK_SLIDE,   SUBSTITUTE,   SURF,         \
-	     STRENGTH
+	     REST,         PSYWAVE,      ROCK_SLIDE,   SUBSTITUTE,   FLAMETHROWER, \
+		 AMNESIA,      SURF,         STRENGTH
 	; end
 
 	db BANK(SnorlaxPicFront)

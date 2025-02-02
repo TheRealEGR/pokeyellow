@@ -16,8 +16,8 @@
 	; tm/hm learnset
 	tmhm TOXIC,        TAKE_DOWN,    DOUBLE_EDGE,  HYPER_BEAM,   RAGE,         \
 	     THUNDERBOLT,  THUNDER,      TELEPORT,     MIMIC,        DOUBLE_TEAM,  \
-	     REFLECT,      BIDE,         SWIFT,        REST,         THUNDER_WAVE, \
-	     SUBSTITUTE,   FLASH
+	     REFLECT,      BIDE,         SELFDESTRUCT, SWIFT,        REST,         \
+		 THUNDER_WAVE, TRI_ATTACK,   EXPLOSION,    SUBSTITUTE,   FLASH
 	; end
 
 	db BANK(MagnetonPicFront)
