@@ -6,7 +6,7 @@ INCLUDE "engine/movie/title.asm"
 INCLUDE "engine/pokemon/load_mon_data.asm"
 INCLUDE "data/items/prices.asm"
 INCLUDE "data/items/names.asm"
-INCLUDE "data/text/unused_names.asm"
+;INCLUDE "data/text/unused_names.asm"
 INCLUDE "engine/gfx/sprite_oam.asm"
 INCLUDE "engine/link/print_waiting_text.asm"
 INCLUDE "engine/overworld/sprite_collisions.asm"
@@ -233,9 +233,9 @@ SECTION "Saffron Guards", ROMX
 INCLUDE "engine/events/saffron_guards.asm"
 
 
-SECTION "Starter Dex", ROMX
+;SECTION "Starter Dex", ROMX
 
-INCLUDE "engine/events/starter_dex.asm"
+;INCLUDE "engine/events/starter_dex.asm"
 
 
 SECTION "Hidden Objects 3", ROMX
