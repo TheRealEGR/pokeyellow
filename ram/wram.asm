@@ -308,12 +308,10 @@ wPrinterTileBuffer:: ds SCREEN_HEIGHT * SCREEN_WIDTH
 wPrinterStatusIndicator:: dw
 wcae2:: db
 wPrinterSettingsTempCopy:: db
-	ds 16
 wPrinterQueueLength:: db
 wPrinterDataEnd::
 
 wPrinterPokedexEntryTextPointer:: dw
-	ds 2
 wPrinterPokedexMonIsOwned:: db
 	ds 226
 UNION
@@ -2423,9 +2421,6 @@ ENDU
 
 
 wTrainerHeaderPtr:: dw
-
-	ds 6
-
 ; the trainer the player must face after getting a wrong answer in the Cinnabar
 ; gym quiz
 wOpponentAfterWrongAnswer:: db
@@ -2433,9 +2428,6 @@ wOpponentAfterWrongAnswer:: db
 ; index of current map script, mostly used as index for function pointer array
 ; mostly copied from map-specific map script pointer and written back later
 wCurMapScript:: db
-
-	ds 7
-
 wPlayTimeHours:: db
 wPlayTimeMaxed:: db
 wPlayTimeMinutes:: db

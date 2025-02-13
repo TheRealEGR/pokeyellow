@@ -131,7 +131,6 @@ INCLUDE "engine/pokemon/bills_pc.asm"
 SECTION "Battle Engine 3", ROMX
 
 INCLUDE "engine/battle/print_type.asm"
-INCLUDE "engine/battle/save_trainer_name.asm"
 
 
 SECTION "Battle Engine 4", ROMX
@@ -325,14 +324,6 @@ SECTION "BG Map Attributes", ROMX
 INCLUDE "data/cgb/bg_map_attributes.asm"
 IF !DEF(_DEBUG)
 	INCLUDE "engine/gfx/bg_map_attributes.asm"
-ENDC
-
-
-SECTION "bank30", ROMX
-
-; This whole bank is garbage data.
-IF !DEF(_DEBUG)
-	INCBIN "garbage/bank30.bin"
 ENDC
 
 
